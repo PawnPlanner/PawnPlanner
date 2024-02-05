@@ -1,8 +1,8 @@
 import express from "express";
-import { welcome } from "../controllers/sample";
+import { login } from "../controllers/login";
 
 const router = express.Router();
 
-router.get('/', welcome)
+router.post("/api/auth/google", login);
 
 export default router;
