@@ -13,7 +13,7 @@ const DummyLogin = () => {
     <div>
       <GoogleLogin
         onSuccess={(credentialResponse) => {
-          console.log(credentialResponse);
+          handleLogin(credentialResponse);
         }}
         onError={() => {
           console.error("Login Failed");
