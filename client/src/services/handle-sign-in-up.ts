@@ -1,7 +1,7 @@
 import React, { Dispatch } from "react";
 import { CredentialResponse } from "@react-oauth/google";
 
-const handleLogin = async (credentialResponse: CredentialResponse) => {
+const handleSignInUp = async (credentialResponse: CredentialResponse) => {
   await fetch(`${process.env.REACT_APP_API}/api/auth/google`, {
     method: "POST",
     credentials: "include",
@@ -16,5 +16,5 @@ const handleLogin = async (credentialResponse: CredentialResponse) => {
   });
 };
 
-export default handleLogin;
+export default handleSignInUp;
 

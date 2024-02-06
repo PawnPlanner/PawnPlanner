@@ -5,29 +5,66 @@ import express from 'express';
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+import session from "express-session";
+
+import { default as connectMongoDBSession } from "connect-mongodb-session";
+
+const MongoDBStore = connectMongoDBSession(session);
 
 import sampleRouter from "./routes/router";
 import loginRouter from "./routes/login";
 
 import logger from "./middlewares/logger";
 
-const app = express();
+import { IUser } from "./db/user";
 
-app.use(cookieParser());
-app.use(cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-}));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(logger);
+declare module "express-session" {
+    interface SessionData {
+      user: IUser;
+    }
+}
 
-app.use(sampleRouter);
-app.use(loginRouter);
+const createApp = (dbname: string) => {
+    const app = express();
+  
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+      })
+    );
+    app.use(cookieParser());
+  
+    const username = process.env.DB_USER_NAME;
+    const password = process.env.DB_PASSWORD;
+    const cluster = process.env.DB_CLUSTER;
 
-const port = process.env.PORT || "8080";
+    app.use(
+      session({
+        name: "ssid",
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 1000 * 60 * 60 * 24, // 1 day
+        },
+        store: new MongoDBStore({
+          uri: `mongodb+srv://${username}:${password}@${cluster}.v5o6onf.mongodb.net/${dbname}?retryWrites=true&w=majority`,
+          collection: "sessions",
+        }),
+      })
+    );
 
-
-app.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`);
-});
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(logger);
+  
+    // set routers
+    app.use(sampleRouter);
+    app.use(loginRouter);
+  
+    return app;
+  };
+  
+  export default createApp;

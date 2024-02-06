@@ -1,8 +1,10 @@
 import express from "express";
-import { login } from "../controllers/login";
+import { signInUp, signout } from "../controllers/login";
+
 
 const router = express.Router();
 
-router.post("/api/auth/google", login);
+router.post("/api/auth/google", signInUp);
+router.get("/api/auth/signout", signout);
 
 export default router;
