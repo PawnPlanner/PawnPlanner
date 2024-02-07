@@ -8,7 +8,8 @@ import {
   saveUser,
   checkUser,
   updateUserToken,
-} from "../services/db";
+  fetchUserByEmail,
+} from "../services/user";
 
 export const signInUp = async (
   req: Request,
@@ -16,30 +17,35 @@ export const signInUp = async (
   next: NextFunction
 ) => {
   const { token } = req.body;
+  let existingAccount = true;
   try {
     const userData = await validateToken(token);
     const exist = await checkUser(userData.email);
     if (exist) {
       // exist == document with _id
       await updateUserToken(userData.email, token);
+      const user = await fetchUserByEmail(userData.email);
+      req.session.user = user;
     } else {
       // exist == null
       const user = await createUser(userData, token);
+      existingAccount = false;
       await saveUser(user);
     }
 
     req.session.user = {
-      name: userData.name,
+      username: userData.name,
       givenName: userData.given_name,
       familyName: userData.family_name,
       email: userData.email,
       emailVerified: userData.email_verified,
       profileImgUrl: userData.picture,
       token: token,
+      onboarded: false,
     };
 
     res.status(201);
-    res.json({ msg: "sign in/up success" });
+    res.json({ user: req.session.user, existingAccount: existingAccount });
   } catch (error) {
     console.error(error);
     res.status(500);

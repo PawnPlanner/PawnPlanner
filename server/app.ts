@@ -12,7 +12,8 @@ import { default as connectMongoDBSession } from "connect-mongodb-session";
 const MongoDBStore = connectMongoDBSession(session);
 
 import sampleRouter from "./routes/router";
-import loginRouter from "./routes/login";
+import authRouter from "./routes/auth";
+import userRouter from "./routes/user"
 
 import logger from "./middlewares/logger";
 
@@ -31,6 +32,10 @@ const createApp = (dbname: string) => {
       cors({
         origin: "http://localhost:3000",
         credentials: true,
+        methods: ["GET", "PUT", "POST"],
+        allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+        maxAge: 600,
+        exposedHeaders: ["*", "Authorization"],
       })
     );
     app.use(cookieParser());
@@ -46,7 +51,6 @@ const createApp = (dbname: string) => {
         resave: false,
         saveUninitialized: false,
         cookie: {
-          secure: process.env.NODE_ENV === "production",
           maxAge: 1000 * 60 * 60 * 24, // 1 day
         },
         store: new MongoDBStore({
@@ -62,7 +66,8 @@ const createApp = (dbname: string) => {
   
     // set routers
     app.use(sampleRouter);
-    app.use(loginRouter);
+    app.use(authRouter);
+    app.use(userRouter);
   
     return app;
   };

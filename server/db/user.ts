@@ -1,18 +1,19 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface IUser {
-  name: string;
+  username: string;
   givenName: string;
   familyName: string;
   email: string;
   emailVerified: Boolean;
   profileImgUrl: string;
-  token: string; // this is for debugging purposese
+  token: string;
+  onboarded: Boolean;
 }
 
 const UserSchema = new Schema<IUser>(
   {
-    name: {
+    username: {
       type: String,
       required: true,
     },
@@ -38,6 +39,10 @@ const UserSchema = new Schema<IUser>(
     },
     token: {
       type: String,
+      required: true,
+    },
+    onboarded: {
+      type: Boolean,
       required: true,
     },
   },
