@@ -2,6 +2,7 @@ import Session from "../session";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginButton from "../components/login-button";
+import Container from 'react-bootstrap/Container';
 
 interface IAuthPageProps {}
 
@@ -17,9 +18,9 @@ const AuthPage = (props: IAuthPageProps) => {
   }, []);
 
   return (
-    <div className="">
+    <Container data-bs-theme="dark"> 
       <LoginButton />
-    </div>
+    </Container>
   );
 };
 
