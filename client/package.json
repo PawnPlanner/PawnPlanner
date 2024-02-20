@@ -17,6 +17,7 @@
     "react-bootstrap": "^2.10.0",
     "react-router-dom": "^6.22.0",
     "react-scripts": "^5.0.1",
+    "reactjs-popup": "^2.0.6",
     "session": "^0.1.0",
     "tailwindcss-patterns": "^0.1.2"
   },

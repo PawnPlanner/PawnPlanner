@@ -40,14 +40,17 @@ const OnBoardPage = () => {
   }
 
   return (
-    <div className="flex flex-wrap items-center mt-20">
-      <div className="w-full text-center sm:w-1/2 sm:px-6">
-        <h3 className="text-3xl font-semibold text-gray-900">
+    <div className="flex justify-center w-screen h-screen items-center bg-navy">
+      <div className="text-center px-6 bg-lgrey w-3/5 h-3/5 ">
+      <div className="w-45 h-45 flex justify-center align mb-12">
+              <img src="/img/pawnlogo.png"></img>
+            </div>
+        <h3 className="text-3xl font-semibold text-navy">
           Welcome {givenName}
         </h3>
 
         <input
-          className="e-input"
+          className="e-input m-3"
           type="text"
           placeholder="Enter User Name"
           onChange={(e) => setUsername(e.target.value)}
@@ -60,13 +63,13 @@ const OnBoardPage = () => {
           onChange={(e) => setMiddleName(e.target.value)}
           value={middleName}
         />
-        <AdjustNamesLink
+        <AdjustNamesLink 
           username={username ? username : ""}
           givenName={givenName ? givenName : ""}
           middleName={middleName ? middleName : ""}
           familyName={familyName ? familyName : ""}
         />
-        <button
+        <button className="text-navy border border-navy rounded-full px-4 py-1 hover:text-lgrey hover:bg-navy mt-4"
           onClick={() => {
               if (user) {
                 setOnboard(email).then(() => {
