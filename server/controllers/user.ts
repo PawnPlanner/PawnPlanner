@@ -5,6 +5,7 @@ import {
   fetchUsersbyUserName,
   updateNames,
   updateUserOnboarded,
+  deleteAccount,
 } from "../services/user";
 
 import fs from "fs";
@@ -96,6 +97,30 @@ export const changeOnboarded = async (
   } catch (error) {
     res.status(404);
     res.json({ msg: "update onboard fail" });
+  }
+};
+
+export const deleteUserAccount= async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const username = req.session.user.email;
+
+  try{
+    await req.session.destroy(async (error) => {
+      if(error) {
+        res.status(500);
+        res.json({msg: "failed to delete"});
+      } else {
+        await deleteAccount(username);
+        res.status(200)
+        res.json({msg: "deletion successful"});
+      }
+    });
+  } catch (error) {
+    res.status(404);
+    res.json({msg:"Cannot fins user to delete"});
   }
 };
 

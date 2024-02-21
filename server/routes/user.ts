@@ -5,6 +5,7 @@ import {
   getUserByUsername,
   changeOnboarded,
   findUsersByUserName,
+  deleteUserAccount,
 } from "../controllers/user";
 
 // import middleware
@@ -21,6 +22,7 @@ router.post("/api/user/onboard", auth, changeOnboarded);
 router.post("/api/user/adjustNames", auth, changeNames);
 router.post("/api/user/queryUsernames", auth, findUsersByUserName);
 router.post("/api/user/queryUsername", auth, findUsersByUserName);
+router.post("/api/user/deleteAccount", auth, deleteUserAccount);
 
 
 export default router;
