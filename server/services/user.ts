@@ -133,3 +133,12 @@ export const updateNames = async (
     throw error;
   }
 };
+
+export const deleteAccount = async (username: string) => {
+  try{
+    await User.deleteOne({email: username});
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+};
