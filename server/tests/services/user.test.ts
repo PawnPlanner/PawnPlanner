@@ -17,6 +17,8 @@ import { validateToken } from "../../services/google-login";
 // import db
 import { connect } from "../../db/connect";
 import User, { IUser } from "../../db/user";
+import { updateNames } from "../../services/user";
+import exp from "constants";
 
 describe("Testing db services", () => {
   const testToken = process.env.DEBUG_GOOGLE_TOKEN;
@@ -99,5 +101,28 @@ describe("Testing db services", () => {
     expect(shouldExist).toEqual({ _id: user._id });
     const shouldNotExist = await checkUser(notExistEmail);
     expect(shouldNotExist).toBe(null);
+  });
+
+  test("Testing update names",async () => {
+    const user = new User({
+      name: "lizzy",
+      username: "ekane",
+      givenName:"Liz",
+      middleName:"M",
+      familyName: "Kane",
+      email: "lkane0705@gmail.com",
+      emailVerified: true,
+      onboarded: false,
+      token: testToken,
+      profileImgUrl:"https://lh3.googleusercontent.com/a/ACg8ocL_uQ8RLVUoETOMcVC-bR8FeAcBEH4ffgaKhk9x5smPEPk=s96-c",
+    })
+
+    const savedUser = await user.save();
+    
+    updateNames("lkane0705@gmail.com", "lkane0705", "Elizabeth", "M", "K");
+    const testUser = await User.findOne({email: "lkane0705@gmail.com"});
+    expect(testUser.username).toBe("lkane0705");
+    expect(testUser.givenName).toBe("Elizabeth");
+    expect(testUser.familyName).toBe("K");
   });
 });
