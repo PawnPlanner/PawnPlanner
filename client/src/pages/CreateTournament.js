@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import Navbar from "../components/navbar";
 
 const RecipeContainer = styled.div`
   display: flex;
@@ -185,11 +185,7 @@ const CreateTournament = () => {
 
   return (
     <Container>
-      <Header>
-        <AppName>
-          <Logo img src="/img/pawnlogo.png" />
-        </AppName>
-      </Header>
+      <Navbar />
 
       <InnerContainer>
         <SaveRecipe>
