@@ -32,10 +32,7 @@ const TournamentSchema = new Schema<ITournament>(
       type: String,
       required: true,
     },
-    players: {
-        type: [Player],
-        required:false,
-    }
+    
   },
   {
     timestamps: true,
