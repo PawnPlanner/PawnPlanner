@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -20,19 +21,19 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 20px;
-  height:15vh;
+  height:20vh;
 //   font-size: 25px;
 //   font-weight: bold;
 //   box-shadow: 0 3px 6px 0 #555;
 `;
 const SearchBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 10px 10px;
-  border-radius: 6px;
-  margin-left: 20px;
-  width: 50%;
-  background-color: white;
+  // display: flex;
+  // flex-direction: row;
+  // padding: 10px 10px;
+  // border-radius: 6px;
+  // margin-left: 20px;
+  // width: 50%;
+  // background-color: white;
 `;
 const SearchIcon = styled.img`
   width: 5vh;
@@ -62,7 +63,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: row;
 //   flex-wrap: wrap;
-  height:85vh;
+  height:75vh;
 //   background: #B7BFCC;
 background: #edf2f4;
   padding: 30px;
@@ -100,14 +101,13 @@ const Input = styled.input`
     border-radius: 5px;
     height: 3vh;
     font-size: 2vh;
-    color: black;
+    color:black;
 `;
 
 const Button = styled.button`
     border-radius: 5px;
     height: 3vh;
     font-size: 2vh;
-
 `;
 
 const Edit = styled(Button)`
@@ -155,7 +155,7 @@ const ScrollBar = styled.div`
 
 
 
-const TournamentInfo = (props) => {
+const TournamentInfo = () => {
     const [players, setPlayers] = useState([]);
     const [name, setName] = useState("");
     const [rating, setRating] = useState("");
@@ -168,7 +168,7 @@ const TournamentInfo = (props) => {
         if (name !== "" && rating !== "") {
             const newPlayer = { name: name, rating: rating, points: 0 };
             setPlayers([...players, newPlayer]);
-            console.log(players);
+            // console.log(players);
             // const sorted = players;
             // // console.log(sorted);
             // const sortedPlayers = sorted.sort((a, b) => (a.rating > b.rating) ? 1 : -1);
@@ -226,9 +226,10 @@ const TournamentInfo = (props) => {
                             value={rating}
                             onChange={(e) => setRating(e.target.value)}>
                         </Input>
+                        &nbsp;
                         <Button
                             onClick={addPlayer}>
-                            &nbsp;Add player
+                            Add player
                         </Button>
                     </form>
                     <br></br>
@@ -269,9 +270,15 @@ const TournamentInfo = (props) => {
                         (element, index) =>
                             <p>
                                 Round {index + 1}
-                                <Edit>
-                                    Edit
-                                </Edit>
+                                {players && <Link
+                                    to="/Round"
+                                    state={{ data: {index, players, data} }}
+                                >
+                                    <Edit>
+                                        Edit
+                                    </Edit>
+                                </Link>}
+
                             </p>
                     )}
                     {/* </ScrollBar> */}
