@@ -224,13 +224,18 @@ const CreateTournament = () => {
           <br></br>
           <label>Date</label>
           <br></br>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => {
-              setStartDate(date);
-              handleDateChange(date);
-            }} />
-          <br></br>
+          <div style={{
+            borderRadius: "5px",
+            height: "3vh",
+            fontSize: "2vh"
+          }}>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => {
+                setStartDate(date);
+                handleDateChange(date);
+              }} />
+          </div>
           <br></br>
           <label>Number of rounds</label>
           <br></br>
