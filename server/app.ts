@@ -52,6 +52,7 @@ const createApp = (dbname: string) => {
         saveUninitialized: false,
         cookie: {
           maxAge: 1000 * 60 * 60 * 24, // 1 day
+          httpOnly: true,
         },
         store: new MongoDBStore({
           uri: `mongodb+srv://${username}:${password}@${cluster}.v5o6onf.mongodb.net/${dbname}?retryWrites=true&w=majority`,
