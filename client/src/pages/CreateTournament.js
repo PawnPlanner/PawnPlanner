@@ -130,7 +130,7 @@ const InnerContainer = styled.div`
   // display: flex;
   // flex-direction: row;
   // flex-wrap: wrap;
-  height:92vh;
+  // height:90vh;
   //   background: #B7BFCC;
 background: #edf2f4;
   padding: 30px;
