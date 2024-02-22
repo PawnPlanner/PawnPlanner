@@ -265,7 +265,6 @@ const CreateTournament = () => {
           </select>
           <br></br>
           <br></br>
-          <br></br>
           {data.name !== "" && data.location !== "" && data.rounds !== 0 && <Link
             to="/TournamentInfo"
             state={{ data: data }}
