@@ -43,13 +43,13 @@ const Nutrition = styled(SeeMoreText)`
 const SaveRecipe = styled.div`
   color: #D90429;
   text-align: center;
-  font-size: 5vh;
+  font-size: 8vh;
   font-weight: bold;
   padding: 2vh;
 `;
 const Form = styled.form`
   text-align: center;
-  font-size: 2vh;
+  font-size: 3vh;
 `;
 
 const Create = styled(SeeMoreText)`
@@ -87,7 +87,7 @@ const Header = styled.div`
   flex-direction: row;
   align-items: center;
   padding: 20px;
-  height:15vh;
+  height:20vh;
   // font-size: 25px;
   // font-weight: bold;
   // box-shadow: 0 3px 6px 0 #555;
@@ -130,7 +130,7 @@ const InnerContainer = styled.div`
   // display: flex;
   // flex-direction: row;
   // flex-wrap: wrap;
-  height:85vh;
+  // height:90vh;
   //   background: #B7BFCC;
 background: #edf2f4;
   padding: 30px;
@@ -224,13 +224,18 @@ const CreateTournament = () => {
           <br></br>
           <label>Date</label>
           <br></br>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => {
-              setStartDate(date);
-              handleDateChange(date);
-            }} />
-          <br></br>
+          <div style={{
+            borderRadius: "5px",
+            height: "3vh",
+            fontSize: "2vh"
+          }}>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => {
+                setStartDate(date);
+                handleDateChange(date);
+              }} />
+          </div>
           <br></br>
           <label>Number of rounds</label>
           <br></br>
@@ -258,7 +263,6 @@ const CreateTournament = () => {
             <option value="Swiss">Swiss</option>
             <option value="Round-Robin">Round-Robin</option>
           </select>
-          <br></br>
           <br></br>
           <br></br>
           {data.name !== "" && data.location !== "" && data.rounds !== 0 && <Link
