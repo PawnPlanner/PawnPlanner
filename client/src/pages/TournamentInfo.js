@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 const Container = styled.div`
   display: flex;
@@ -188,11 +189,7 @@ const TournamentInfo = () => {
 
     return (
         <Container>
-            <Header>
-                <AppName>
-                    <RecipeImage img src="/img/pawnlogo.png" />
-                </AppName>
-            </Header>
+            <Navbar />
             <Tournament>
                 {data && data.name}
                 <br></br>

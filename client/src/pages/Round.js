@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
+import Navbar from "../components/navbar";
 
 const Container = styled.div`
   display: flex;
@@ -215,11 +216,7 @@ const Round = () => {
 
   return (
     <Container>
-      <Header>
-        <AppName>
-          <RecipeImage img src="/img/pawnlogo.png" />
-        </AppName>
-      </Header>
+      <Navbar />
       <Tournament>
         Round {data && data.index + 1}
         <br></br>
