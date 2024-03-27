@@ -1,6 +1,6 @@
 import { TTournament } from "../types/tournament"
 
-const CreateTournament = async(tournament: TTournament)=> {
+const CreateNTournament = async(tournament: TTournament)=> {
     return new Promise(async (resolve, reject) => {
         try {
           await fetch(`${process.env.REACT_APP_API}/api/maketournament`, {
@@ -24,4 +24,4 @@ const CreateTournament = async(tournament: TTournament)=> {
       });
 };
 
-export default CreateTournament;
+export default CreateNTournament;

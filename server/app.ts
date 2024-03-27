@@ -13,7 +13,8 @@ const MongoDBStore = connectMongoDBSession(session);
 
 import sampleRouter from "./routes/router";
 import authRouter from "./routes/auth";
-import userRouter from "./routes/user"
+import userRouter from "./routes/user";
+import tournamentRouter from "./routes/tournament";
 
 import logger from "./middlewares/logger";
 
@@ -69,6 +70,7 @@ const createApp = (dbname: string) => {
     app.use(sampleRouter);
     app.use(authRouter);
     app.use(userRouter);
+    app.use(tournamentRouter);
   
     return app;
   };
