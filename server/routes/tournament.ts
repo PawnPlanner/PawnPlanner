@@ -9,6 +9,7 @@ import {
     editTournament,
     removeTournament,
     getTournamentByUser,
+    byeSignup,
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -18,6 +19,7 @@ const router = express.Router();
 router.post("/api/maketournament", storeTournament);
 router.post("/api/tournament/addplayer", additionalPlayer);
 router.post("/api/tournament/removeplayer", deletePlayer);
+router.post("/api/tournament/bye", byeSignup);
 router.post("/api/tournament/edit", editTournament);
 router.post("/api/deleteTournament", removeTournament);
 

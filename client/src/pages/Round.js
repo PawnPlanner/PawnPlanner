@@ -206,7 +206,7 @@ const Round = () => {
 
   }
 
-  const updatePairings = (pairing, matchResult) => {
+  const updateResult = (pairing, matchResult) => {
     const index = pairings.findIndex((p) => p.player1 === pairing.player1);
     const updatedPairings = { ...pairings[index], result: matchResult };
     const newPairings = [...pairings];
@@ -308,7 +308,7 @@ const Round = () => {
                   <td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
-                    onChange={(e) => updatePairings(pairing, e.target.value)}
+                    onChange={(e) => updateResult(pairing, e.target.value)}
                   >
                     <option selected value>Select Winner</option>
                     <option value="1">White Won</option>

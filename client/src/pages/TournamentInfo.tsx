@@ -10,6 +10,7 @@ import fetchTournamentById from "../services/fetch-tournament-id";
 import addPlayer from "../services/add-player";
 import deletePlayer from "../services/delete-player";
 import { Navigate } from "react-router-dom";
+import byeSignup from "../services/bye-signup";
 
 const Container = styled.div`
   display: flex;
@@ -248,11 +249,11 @@ const TournamentInfo = () => {
                         <button className="px-5 py-0.5 mx-3 rounded-md bg-red"
                             onClick={async (e) => {
                                 e.preventDefault();
-
                                 await addPlayer({
                                     name: name,
                                     rating: parseInt(rating),
                                     points: 0,
+                                    bye: false
                                 }, id)
                                 tournamentPlayers();
                             }}>
@@ -283,12 +284,24 @@ const TournamentInfo = () => {
                                         <td>{player.points}</td>
                                         {
                                         }
-                                        <td><button className="px-3 mx-1 rounded-md bg-red" onClick={() => {
-                                            deletePlayer(player, id);
-                                            tournamentPlayers();
-                                        }}>
-                                            Remove
-                                        </button></td>
+                                        <td className="flex  justify-between">
+                                            <button className="text-sm px-1 mx-1 rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault();
+                                                    await deletePlayer(player, id);
+                                                    tournamentPlayers();
+                                                }}>
+                                                Remove
+                                            </button>
+                                            <button className="text-sm px-1 mx-1 rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault()
+                                                    console.log(players)
+                                                    await byeSignup(player, id)
+                                                    tournamentPlayers();
+                                                }}>
+                                                Bye Signup
+                                            </button></td>
                                     </TableRow>
                                 ))}
                         </tbody>
@@ -322,6 +335,18 @@ const TournamentInfo = () => {
                     <Heading>
                         Bye Queue
                     </Heading>
+
+                    <table>
+                        <tbody>
+                            {players.filter((player) => player.bye)
+                                .map((player, index) => (
+                                    <tr key={index} >
+                                        <td>{player.name}</td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </table>
+
                 </ByeQueue>
             </InnerContainer>
         </Container>
