@@ -86,7 +86,6 @@ export const updateTournament = async(
   tournament: TTournament
 ) => {
   try {
-   
     await Tournament.findByIdAndUpdate(tournament._id, {
       name: tournament.name,
       rounds: tournament.rounds,
@@ -113,7 +112,6 @@ export const deleteTournament = async(tournament: TTournament) => {
 export const fetchTournamentByUser = async(user: string) => {
   try {
     const tournaments = await Tournament.find({owner: user});
-    console.log('here');
     return tournaments;
   } catch(error) {
     throw(error);

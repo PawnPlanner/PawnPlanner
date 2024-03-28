@@ -16,7 +16,7 @@ const EditPage = () => {
     const [tournament, setTournament] = useState<TTournament | null>(null);
     const [location, setLocation] = useState<string>("");
     const [name, setName] = useState<string>("");
-    const [rounds, setRounds] = useState<string>();
+    const [rounds, setRounds] = useState<string>("");
     const [pairingSystem, setPairingSystem] = useState("");
     const [date, setDate] = useState<Date | null>(null);
     useEffect(() => {
@@ -43,6 +43,7 @@ const EditPage = () => {
     
    }
    setter();
+   
   }, [])
   if (!user) {
     return <div>fetching user home</div>;
@@ -144,13 +145,13 @@ const EditPage = () => {
             onClick={ async () => {
              await editTournament({
                 _id: tournament._id,
-                name: tournament.name,
-                location: tournament.location,
-                date: tournament.date,
-                rounds: tournament.rounds,
-                pairingSystem: tournament.pairingSystem,
+                name: name,
+                location: location,
+                date: date,
+                rounds: rounds,
+                pairingSystem: pairingSystem,
                 players: tournament.players,
-                owner: user.username,
+                owner: tournament.owner,
               })
               .then (async(res) => {
                 setTimeout(() => {

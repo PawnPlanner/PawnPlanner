@@ -56,7 +56,7 @@ export const additionalPlayer = async (req: Request, res: Response) => {
         const player = await createPlayer(req.body.player);
         await addPlayer(player, req.body.id);
         res.status(201);
-        res.json({ error: error });
+        res.json({ msg: "success" });
     } catch {
         res.status(500);
         res.json({ error: error });
@@ -70,15 +70,16 @@ export const deletePlayer = async (req: Request, res: Response) => {
         res.json({ error: error });
     } catch {
         res.status(500);
-        res.json({ error: error });
+        res.json({ msg: "success" });
     }
 }
 
 export const editTournament = async (req: Request, res: Response) => {
     try {
+        
         await updateTournament(req.body.tournament);
         res.status(201);
-        res.json({ error: error })
+        res.json({ msg: "success" })
     } catch {
         res.status(500);
         res.json({ error: error });
@@ -89,7 +90,7 @@ export const removeTournament = async (req: Request, res: Response) => {
     try {
         await deleteTournament(req.body.tournament);
         res.status(201);
-        res.json({error: error});
+        res.json({msg: "success" });
     }
     catch {
         res.status(500);
