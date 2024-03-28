@@ -18,7 +18,7 @@ const PlayerSchema = new Schema<IPlayer>(
     },
     points: {
         type: Number,
-        required: false,
+        required: true,
     }
    
   },

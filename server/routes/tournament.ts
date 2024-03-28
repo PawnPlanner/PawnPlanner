@@ -14,7 +14,7 @@ import auth from "../middlewares/auth";
 const router = express.Router();
 
 router.post("/api/maketournament", storeTournament);
-router.post("/api/tournament/add", additionalPlayer);
+router.post("/api/tournament/addplayer", additionalPlayer);
 router.post("/api/tournament/removeplayer", deletePlayer);
 router.post("/api/tournament/edit", editTournament);
 

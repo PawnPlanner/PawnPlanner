@@ -168,47 +168,48 @@ const TournamentInfo = () => {
     const [name, setName] = useState("");
     const [rating, setRating] = useState("");
     const location = useLocation();
-    const [tournament, setTournament] = useState<TTournament | null> (null);
-    const {id} = useParams();
+    const [tournament, setTournament] = useState<TTournament | null>(null);
+    const { id } = useParams();
     let navigate = useNavigate();
     useEffect(() => {
-        if(id) {
+        if (id) {
             fetchTournamentById(id).then((tournament) => {
                 setTournament(tournament);
-                if(tournament.players) {
+                if (tournament.players) {
                     setPlayers(tournament.players);
-                } 
-                
+                }
+
             })
         }
-    })
-    if(!tournament) {
+    }, [])
+    if (!tournament) {
         return <div>fetching tournament</div>
     }
-    if(!id) {
+    if (!id) {
         return <div>fetching tournament</div>
     }
-   
 
     return (
         <Container>
             <Navbar />
             <Tournament>
+
                 {tournament.name}
                 <br></br>
+
                 <Info>
-                    Location: {tournament.location} | Date: {tournament.date ? 'props.tournament.date' : ""}
+                    Location: {tournament.location} | Date: {tournament.date ? new Date(tournament.date).toLocaleDateString() : ""}
                     <br></br>
                     Rounds: {tournament.rounds} | Pairing System: {tournament.pairingSystem}
                     <br />
                     <button className="w-12 text-base rounded-full font-large bg-navy text-lgrey"
-                    onClick={() => navigate(`/edit/${id}`)}>
-                    edit
-                </button>
+                        onClick={() => navigate(`/edit/${id}`)}>
+                        edit
+                    </button>
                 </Info>
-              
+
             </Tournament>
-            
+
             <InnerContainer>
                 <PlayerRegistration>
                     {/* <ScrollBar> */}
@@ -234,15 +235,18 @@ const TournamentInfo = () => {
                             onChange={(e) => setRating(e.target.value)}>
                         </Input>
                         &nbsp;
-                        <button
-                        onClick={async () => addPlayer({
-                            name:name,
-                            rating: parseInt(rating),
-                            points: 0,
-                        }, id)}>
+                        <button className="px-5 py-0.5 mx-3 rounded-md bg-red"
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                await addPlayer({
+                                    name: name,
+                                    rating: parseInt(rating),
+                                    points: 0,
+                                }, id)
+                            }}>
                             Add player
                         </button>
-                       
+
                     </form>
                     <br></br>
                     <TableRow>
@@ -286,7 +290,7 @@ const TournamentInfo = () => {
                                 Round {index + 1}
                                 {players && <Link
                                     to="/Round"
-                                    state={{ data: {index, players} }}
+                                    state={{ data: { index, players } }}
                                 >
                                     <Edit>
                                         Edit

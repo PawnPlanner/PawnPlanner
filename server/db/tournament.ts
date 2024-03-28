@@ -32,6 +32,11 @@ const TournamentSchema = new Schema<ITournament>(
       type: String,
       required: true,
     },
+    players: {
+      type: [{
+      }],
+      required: true,
+    }
   
     
   },
