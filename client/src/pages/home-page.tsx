@@ -18,12 +18,12 @@ const HomePage = () => {
   return (
     <div className="w-screen h-screen overflow-hidden">
       <Navbar />
-      <div className="bg-grey h-full">
+      <div className="h-full bg-grey">
         <div className="flex justify-center pt-20">
-          <h1 className="text-red text-5xl font-bold">Start Playing Today!</h1>
+          <h1 className="text-5xl font-bold text-red">Start Playing Today!</h1>
         </div>
-        <div className=" flex flex-row justify-evenly mt-36">
-          <button className="text-lgrey text-3xl bg-navy border border-navy rounded-xl p-10 hover:text-red w-72"
+        <div className="flex flex-row justify-evenly mt-36">
+          <button className="p-10 text-3xl border text-lgrey bg-navy border-navy rounded-xl hover:text-red w-72"
             onClick={() => {
               navigate("/CreateTournament");
               window.location.reload();
@@ -31,7 +31,7 @@ const HomePage = () => {
           >
             Create a Tournament
           </button>
-          <button className="text-lgrey text-3xl bg-navy border border-navy rounded-xl hover:text-red w-72"
+          <button className="text-3xl border text-lgrey bg-navy border-navy rounded-xl hover:text-red w-72"
             onClick={() => {
               navigate("/Settings");
               window.location.reload();
@@ -40,8 +40,15 @@ const HomePage = () => {
             Settings
           </button>
         </div>
-        <div>
-
+        <div className="flex flex-row justify-evenly mt-36">
+        <button className="p-10 text-3xl border text-lgrey bg-navy border-navy rounded-xl hover:text-red w-72"
+            onClick={() => {
+              navigate("/myTournaments");
+              window.location.reload();
+            }}
+          >
+            My Tournaments
+          </button>
         </div>
       </div>
     </div>

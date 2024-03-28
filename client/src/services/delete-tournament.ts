@@ -1,10 +1,10 @@
 import { TTournament } from "../types/tournament"
 
-const editTournament = async(tournament: TTournament)=> {
+const deleteTournament = async(tournament: TTournament)=> {
     return new Promise(async (resolve, reject) => {
         try {
             
-          await fetch(`${process.env.REACT_APP_API}/api/tournament/edit`, {
+          await fetch(`${process.env.REACT_APP_API}/api/deleteTournament`, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
@@ -25,4 +25,4 @@ const editTournament = async(tournament: TTournament)=> {
       });
 };
 
-export default editTournament;
+export default deleteTournament;

@@ -278,7 +278,7 @@ const TournamentInfo = () => {
                                         {
                                         }
                                         <td><button className="px-3 mx-1 rounded-md bg-red" onClick={() => {
-                                            deletePlayer(player, id)
+                                            deletePlayer(player, id);
                                             tournamentPlayers();
                                         }}>
                                             Remove

@@ -8,6 +8,8 @@ import CreateNTournament from "../services/create-tournament";
 import  {TTournament } from "../types/tournament";
 import { async } from "q";
 import fetchTournamentByName from "../services/fetch-tournament-by-name";
+import { TUser } from "../types/user";
+import Session from "../session";
 
 
 
@@ -18,9 +20,15 @@ const CreateTournament = () => {
   const [rounds, setRounds] = useState('0');
   const [pairingSystem, setPairingSystem] = useState('Swiss');
   const [tournament, setTournament] = useState<TTournament>();
+  const [user, setUser] = useState<TUser | null>(null);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    setUser(Session.getUser());
+  }, [user]);
  
+  if(!user) {
+    return(<div>fetching user</div>)
+  }
 
   return (
     <div className="w-screen h-screen overflow-hidden">
@@ -118,7 +126,8 @@ const CreateTournament = () => {
                 location: location,
                 date: startDate,
                 pairingSystem: pairingSystem,
-                rounds: rounds
+                rounds: rounds,
+                owner: user.username
               }).then(async () => {
                 const tourn = await fetchTournamentByName(name)
                 if(tourn){

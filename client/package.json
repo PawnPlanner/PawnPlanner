@@ -13,6 +13,7 @@
     "node": "^21.6.1",
     "process": "^0.11.10",
     "props": "^0.3.0",
+    "raw-body": "^2.5.2",
     "react": "^18.2.0",
     "react-app": "^1.1.2",
     "react-bootstrap": "^2.10.0",

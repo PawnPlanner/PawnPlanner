@@ -5,10 +5,11 @@ import { TokenPayload } from "google-auth-library";
 import User, { IUser } from "../db/user";
 import Tournament, { ITournament } from "../db/tournament";
 import Player, { IPlayer } from "../db/player";
-
+import { TPlayer } from "../types/player";
+import { TTournament } from "../types/tournament";
 
 export const createtournament = async (
-  newTournament: ITournament
+  newTournament: TTournament
 ): Promise<mongoose.Document<unknown, any, ITournament>> => {
   const tournament = new Tournament({
     name: newTournament.name,
@@ -16,6 +17,7 @@ export const createtournament = async (
     location: newTournament.location,
     pairingSystem: newTournament.pairingSystem,
     date: newTournament.date,
+    owner: newTournament.owner,
   });
 
   return tournament;
@@ -52,7 +54,7 @@ export const fetchTournamentByName = async (name: string) => {
 }
 
 export const createPlayer = async (
-  newPlayer: IPlayer
+  newPlayer: TPlayer
 ): Promise<mongoose.Document<unknown, any, IPlayer>> => {
   const player = new Player({
     name: newPlayer.name,
@@ -66,17 +68,55 @@ export const createPlayer = async (
 export const addPlayer = async (
   player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
   try {
-    console.log(player)
     await Tournament.findOneAndUpdate({ _id: id }, { $push: { players: player } })
   } catch (error) {
     throw error
   }
 }
 export const removePlayer = async (
-  player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
+  player: TPlayer) => {
   try {
-    await Tournament.findOneAndUpdate({ _id: id }, { $pull: { players: player } })
+    await Player.findOneAndDelete(player);
   } catch (error) {
-    throw error
+    throw error;
   }
+}
+
+export const updateTournament = async(
+  tournament: TTournament
+) => {
+  try {
+   
+    await Tournament.findByIdAndUpdate(tournament._id, {
+      name: tournament.name,
+      rounds: tournament.rounds,
+      location: tournament.location,
+      date: tournament.date,
+      pairingSystem: tournament.pairingSystem,
+      players: tournament.players,
+      owner: tournament.owner,
+    });
+   
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const deleteTournament = async(tournament: TTournament) => {
+  try {
+    await Tournament.findByIdAndDelete(tournament._id);
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchTournamentByUser = async(user: string) => {
+  try {
+    const tournaments = await Tournament.find({owner: user});
+    console.log('here');
+    return tournaments;
+  } catch(error) {
+    throw(error);
+  }
+
 }

@@ -8,6 +8,9 @@ import {
     addPlayer,
     createPlayer,
     removePlayer,
+    updateTournament,
+    deleteTournament,
+    fetchTournamentByUser,
 } from "../services/tournament"
 import { error } from "console";
 
@@ -62,7 +65,7 @@ export const additionalPlayer = async (req: Request, res: Response) => {
 
 export const deletePlayer = async (req: Request, res: Response) => {
     try {
-        await removePlayer(req.body.player, req.body.id);
+        await removePlayer(req.body.player);
         res.status(201);
         res.json({ error: error });
     } catch {
@@ -73,11 +76,35 @@ export const deletePlayer = async (req: Request, res: Response) => {
 
 export const editTournament = async (req: Request, res: Response) => {
     try {
-        await saveTournament(req.body.tournament);
+        await updateTournament(req.body.tournament);
         res.status(201);
         res.json({ error: error })
     } catch {
         res.status(500);
         res.json({ error: error });
+    }
+}
+
+export const removeTournament = async (req: Request, res: Response) => {
+    try {
+        await deleteTournament(req.body.tournament);
+        res.status(201);
+        res.json({error: error});
+    }
+    catch {
+        res.status(500);
+        res.json({error:error});
+    }
+}
+
+export const getTournamentByUser = async (req:Request, res: Response) => {
+    try {
+        const tournaments = await fetchTournamentByUser(req.params.user);
+        res.status(201);
+        res.json({tournaments: tournaments});
+    }
+    catch(error) {
+        res.status(5005);
+        res.json({error: error});
     }
 }

@@ -8,17 +8,20 @@ import fetchTournamentById from "../services/fetch-tournament-id";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import editTournament from "../services/edit-tournament";
-
+import getUser from "../services/get-user";
+import deleteTournament from "../services/delete-tournament";
 
 const EditPage = () => {
-  const [user, setUser] = useState<TUser | null>(null);
-  const [tournament, setTournament] = useState<TTournament | null>(null);
-  const [name, setName] = useState(tournament?.name);
-  const [location, setLocation] = useState(tournament?.location);
-  const [startDate, setStartDate] = useState(tournament?.date);
-  const [rounds, setRounds] = useState(tournament?.rounds);
-  const [pairingSystem, setPairingSystem] = useState(tournament?.pairingSystem);
-
+    const [user, setUser] = useState<TUser | null>(null);
+    const [tournament, setTournament] = useState<TTournament | null>(null);
+    const [location, setLocation] = useState<string>("");
+    const [name, setName] = useState<string>("");
+    const [rounds, setRounds] = useState<string>();
+    const [pairingSystem, setPairingSystem] = useState("");
+    const [date, setDate] = useState<Date | null>(null);
+    useEffect(() => {
+        setUser(Session.getUser());
+      }, [user]);
   const {id} = useParams()
   useEffect(() => {
     setUser(Session.getUser());
@@ -31,11 +34,16 @@ const EditPage = () => {
         if(id) {
             const tourn = await fetchTournamentById(id);
             setTournament(tourn);
+            setLocation(tourn.location);
+            setName(tourn.name);
+            setPairingSystem(tourn.pairingSystem);
+            setDate(tourn.date);
+            setRounds(tourn.rounds);
         };
     
    }
    setter();
-  }, [tournament])
+  }, [])
   if (!user) {
     return <div>fetching user home</div>;
   }
@@ -53,7 +61,7 @@ const EditPage = () => {
           <h1 className="text-5xl font-bold text-red">Edit Your Tournament</h1>
         </div>
             
-        <form className="grid grid-cols-5 pt-12 text-navy">
+        <div className="grid grid-cols-5 pt-12 text-navy">
         <div className="col-span-1 col-start-2 ml-32">
 
         
@@ -62,12 +70,12 @@ const EditPage = () => {
           <input
             className="px-5 py-1 mt-2 rounded-full"
             type="text"
-            required
-            placeholder={tournament.name}
+            value={name}
             onChange={(e) => {
-                tournament.name = e.target.value;
+                setName(e.target.value);
               
             }}
+            defaultValue={tournament.name}
           />
           <br></br>
           <br></br>
@@ -76,12 +84,12 @@ const EditPage = () => {
           <input
             className="px-5 py-1 mt-2 rounded-full"
             type="text"
-            required
-            placeholder={tournament.location}
+            value={location}
             onChange={(e) => {
-              tournament.location = e.target.value;
+              setLocation(e.target.value);
               
             }}
+            defaultValue={tournament.location}
           ></input>
           <br></br>
           <br></br>
@@ -94,9 +102,9 @@ const EditPage = () => {
           }}>
             <DatePicker
              className="px-5 py-1 mt-2 rounded-full"
-             
+             selected={date}
              onChange={
-              (date) => tournament.date = date
+              (date) => setDate(date)
               } />
           </div>
           </div>
@@ -106,13 +114,13 @@ const EditPage = () => {
           <input
            className="px-5 py-1 mt-2 rounded-full"
             type="number"
-            required
             min="0"
-            value={tournament.rounds}
+            value={rounds}
             onChange={(e) => {
-              tournament.rounds = e.target.value;
+              setRounds(e.target.value);
               
-            }} />
+            }} 
+            defaultValue={tournament.rounds}/>
           <br></br>
           <br></br>
           <label>Pairing System
@@ -120,11 +128,12 @@ const EditPage = () => {
           <br></br>
           <select
              className="px-5 py-1 mt-2 rounded-full"
-            
+            value={pairingSystem}
             onChange={(e) => {
+             setPairingSystem(e.target.value);
              
-             
-            }}>
+            }}
+            defaultValue={tournament.pairingSystem}>
             <option value="Swiss">Swiss</option>
             <option value="Round-Robin">Round-Robin</option>
           </select>
@@ -133,15 +142,50 @@ const EditPage = () => {
          
             <button className="px-4 py-3 m-10 rounded-full bg-navy text-lgrey hover:text-grey"
             onClick={ async () => {
-              editTournament(tournament);
-              navigate(`TournamentInfo/${id}`)
+             await editTournament({
+                _id: tournament._id,
+                name: tournament.name,
+                location: tournament.location,
+                date: tournament.date,
+                rounds: tournament.rounds,
+                pairingSystem: tournament.pairingSystem,
+                players: tournament.players,
+                owner: user.username,
+              })
+              .then (async(res) => {
+                setTimeout(() => {
+                    navigate(`/TournamentInfo/${id}`)
+                  }, 1500);
+                  Session.setUser(await getUser());
+              }).catch((err) => {
+
+              });
+              
             }}
             >
               Save
             </button>
+            <button className="px-4 py-3 rounded-full bg-lred text-lgrey hover:text-grey"
+            onClick={async () => {
+                await deleteTournament({
+                    _id: tournament._id,
+                    name: tournament.name,
+                    location: tournament.location,
+                    date: tournament.date,
+                    rounds: tournament.rounds,
+                    pairingSystem: tournament.pairingSystem,
+                    players: tournament.players,
+                    owner: user.username,
+                })
+                .then( async() => {
+                    navigate('/');
+                })
+            } }>
+                Delete Tournament 
+            </button>
           
           </div>
-        </form>
+        </div>
 
         
       </div>

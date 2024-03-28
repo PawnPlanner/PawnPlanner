@@ -2,16 +2,22 @@ import mongoose, { Schema } from "mongoose";
 import Player,{IPlayer} from "./player";
 
 export interface ITournament {
-    name: String;
-    location: String,
+    id: string;
+    name: string;
+    location: string,
     date: Date;
-    rounds: Number;
-    pairingSystem: String;
+    rounds: number;
+    pairingSystem: string;
     players:[IPlayer];
+    owner:string;
 }
 
 const TournamentSchema = new Schema<ITournament>(
   {
+    id: {
+      type: String,
+      required: false,
+    },
     name: {
       type: String,
       required: true,
@@ -35,6 +41,10 @@ const TournamentSchema = new Schema<ITournament>(
     players: {
       type: [{
       }],
+      required: true,
+    },
+    owner: {
+      type: String,
       required: true,
     }
   

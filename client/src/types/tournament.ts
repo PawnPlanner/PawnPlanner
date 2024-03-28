@@ -8,5 +8,6 @@ export type TTournament = {
     rounds: string;
     pairingSystem: string;
     players?:[TPlayer];
+    owner:string;
 };
   

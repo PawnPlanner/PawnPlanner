@@ -1,9 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 
 export interface IPlayer {
-    name: String;
-    rating: Number;
-    points: Number;
+    name: string;
+    rating: number;
+    points: number;
 }
 
 const PlayerSchema = new Schema<IPlayer>(
