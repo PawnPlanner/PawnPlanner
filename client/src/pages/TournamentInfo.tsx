@@ -181,7 +181,7 @@ const TournamentInfo = () => {
 
             })
         }
-    }, [])
+    })
     if (!tournament) {
         return <div>fetching tournament</div>
     }
