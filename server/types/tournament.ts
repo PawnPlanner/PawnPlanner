@@ -1,7 +1,7 @@
 import { TPlayer } from "./player";
 
 export type TTournament = {
-    _id?: string;
+    _id?: string,
     name: string,
     location: string,
     date: Date,
