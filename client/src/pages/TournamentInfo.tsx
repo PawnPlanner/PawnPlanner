@@ -79,7 +79,7 @@ background: #edf2f4;
 //   justify-content: space-evenly;
 `;
 
-const SaveRecipe = styled.div`
+const Heading = styled.div`
 //   color: #D90429;
   text-align: center;
   font-weight: bold;
@@ -101,6 +101,11 @@ const PlayerRegistration = styled.div`
 `;
 
 const Rounds = styled(PlayerRegistration)`
+font-size: 3vh;
+
+`;
+
+const ByeQueue = styled(PlayerRegistration)`
 font-size: 3vh;
 
 `;
@@ -171,12 +176,13 @@ const TournamentInfo = () => {
     const [tournament, setTournament] = useState<TTournament | null>(null);
     const { id } = useParams();
     let navigate = useNavigate();
+    const [byes, setByes] = useState("");
 
     const tournamentPlayers = () => {
         if (id) {
             fetchTournamentById(id).then((tournament) => {
                 setTournament(tournament);
-                if (tournament.players) {
+                if (tournament && tournament.players) {
                     setPlayers(tournament.players);
                 }
             })
@@ -217,9 +223,9 @@ const TournamentInfo = () => {
             <InnerContainer>
                 <PlayerRegistration>
                     {/* <ScrollBar> */}
-                    <SaveRecipe>
+                    <Heading>
                         Player Registration
-                    </SaveRecipe>
+                    </Heading>
                     <form>
                         <label>Name&nbsp;</label>
                         <Input
@@ -292,16 +298,16 @@ const TournamentInfo = () => {
 
                 <Rounds>
                     {/* <ScrollBar> */}
-                    <SaveRecipe>
+                    <Heading>
                         Rounds
-                    </SaveRecipe>
+                    </Heading>
                     {Array.from({ length: parseInt(tournament.rounds) }).map(
                         (element, index) =>
                             <p>
                                 Round {index + 1}
                                 {players && <Link
                                     to="/Round"
-                                    state={{ data: { index, players } }}
+                                    state={{ data: { index, id } }}
                                 >
                                     <Edit>
                                         Edit
@@ -312,6 +318,11 @@ const TournamentInfo = () => {
                     )}
                     {/* </ScrollBar> */}
                 </Rounds>
+                <ByeQueue>
+                    <Heading>
+                        Bye Queue
+                    </Heading>
+                </ByeQueue>
             </InnerContainer>
         </Container>
     )
