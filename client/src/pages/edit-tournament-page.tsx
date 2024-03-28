@@ -1,35 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { TUser } from "../types/user";
+import Session from "../session";
+import { useEffect, useState } from "react";
+import Navbar from "../components/navbar";
+import { useNavigate, useParams } from "react-router-dom";
+import { TTournament } from "../types/tournament";
+import fetchTournamentById from "../services/fetch-tournament-id";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Navbar from "../components/navbar";
-import CreateNTournament from "../services/create-tournament";
-import  {TTournament } from "../types/tournament";
-import { async } from "q";
-import fetchTournamentByName from "../services/fetch-tournament-by-name";
+import editTournament from "../services/edit-tournament";
 
 
+const EditPage = () => {
+  const [user, setUser] = useState<TUser | null>(null);
+  const [tournament, setTournament] = useState<TTournament | null>(null);
+  const [name, setName] = useState(tournament?.name);
+  const [location, setLocation] = useState(tournament?.location);
+  const [startDate, setStartDate] = useState(tournament?.date);
+  const [rounds, setRounds] = useState(tournament?.rounds);
+  const [pairingSystem, setPairingSystem] = useState(tournament?.pairingSystem);
 
-const CreateTournament = () => {
-  const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [rounds, setRounds] = useState('0');
-  const [pairingSystem, setPairingSystem] = useState('Swiss');
-  const [tournament, setTournament] = useState<TTournament>();
-  const navigate = useNavigate();
+  const {id} = useParams()
+  useEffect(() => {
+    setUser(Session.getUser());
+  }, [user]);
+  let navigate = useNavigate();
 
  
-
+  useEffect(() => {
+    const setter = async () => {
+        if(id) {
+            const tourn = await fetchTournamentById(id);
+            setTournament(tourn);
+        };
+    
+   }
+   setter();
+  }, [tournament])
+  if (!user) {
+    return <div>fetching user home</div>;
+  }
+  if(!id) {
+    return <div>fetching tournament</div>
+  }
+  if(!tournament) {
+    return <div> fetching tournament</div>
+  }
   return (
     <div className="w-screen h-screen overflow-hidden">
       <Navbar />
-      <div className="h-full bg-lgrey">
-        <div className="flex justify-center pt-20" >
-          <h1 className="text-5xl font-bold text-red">Create a Tournament</h1>
+      <div className="h-full bg-grey">
+        <div className="flex justify-center pt-20">
+          <h1 className="text-5xl font-bold text-red">Edit Your Tournament</h1>
         </div>
-        
+            
         <form className="grid grid-cols-5 pt-12 text-navy">
         <div className="col-span-1 col-start-2 ml-32">
 
@@ -40,9 +63,9 @@ const CreateTournament = () => {
             className="px-5 py-1 mt-2 rounded-full"
             type="text"
             required
-            value={name}
+            placeholder={tournament.name}
             onChange={(e) => {
-              setName(e.target.value);
+                tournament.name = e.target.value;
               
             }}
           />
@@ -54,9 +77,9 @@ const CreateTournament = () => {
             className="px-5 py-1 mt-2 rounded-full"
             type="text"
             required
-            value={location}
+            placeholder={tournament.location}
             onChange={(e) => {
-              setLocation(e.target.value);
+              tournament.location = e.target.value;
               
             }}
           ></input>
@@ -71,9 +94,9 @@ const CreateTournament = () => {
           }}>
             <DatePicker
              className="px-5 py-1 mt-2 rounded-full"
-             selected={startDate} 
+             
              onChange={
-              (date) => setStartDate(date)
+              (date) => tournament.date = date
               } />
           </div>
           </div>
@@ -85,9 +108,9 @@ const CreateTournament = () => {
             type="number"
             required
             min="0"
-            value={rounds}
+            value={tournament.rounds}
             onChange={(e) => {
-              setRounds(e.target.value);
+              tournament.rounds = e.target.value;
               
             }} />
           <br></br>
@@ -97,9 +120,9 @@ const CreateTournament = () => {
           <br></br>
           <select
              className="px-5 py-1 mt-2 rounded-full"
-            value={pairingSystem}
+            
             onChange={(e) => {
-              setPairingSystem(e.target.value);
+             
              
             }}>
             <option value="Swiss">Swiss</option>
@@ -107,39 +130,23 @@ const CreateTournament = () => {
           </select>
           <br></br>
           <br></br>
-          {name !== "" && location !== "" && rounds !== '0' && <Link
-            to="/TournamentInfo:id"
-            
-          >
+         
             <button className="px-4 py-3 m-10 rounded-full bg-navy text-lgrey hover:text-grey"
             onClick={ async () => {
-              await CreateNTournament({
-                name: name,
-                location: location,
-                date: startDate,
-                pairingSystem: pairingSystem,
-                rounds: rounds
-              }).then(async () => {
-                const tourn = await fetchTournamentByName(name)
-                if(tourn){
-                 
-                  setTimeout(() => {
-                    navigate(`/TournamentInfo/${tourn._id}`);
-                  }, 200)
-                } 
-              })
+              editTournament(tournament);
+              navigate(`TournamentInfo/${id}`)
             }}
             >
-              Create
+              Save
             </button>
-          </Link>}
+          
           </div>
         </form>
-      </div>
 
+        
+      </div>
     </div>
-  
   );
 };
 
-export default CreateTournament;
+export default EditPage;

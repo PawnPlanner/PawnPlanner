@@ -8,6 +8,7 @@ import CreateTournament from "../pages/CreateTournament";
 import TournamentInfo from "../pages/TournamentInfo"
 import SettingsPage from "../pages/settings-page";
 import Round from "../pages/Round";
+import EditPage from "../pages/edit-tournament-page";
 
 const Router = () => {
     let element = useRoutes([
@@ -24,8 +25,9 @@ const Router = () => {
             element: <HomePage />,
         },
         {
-            path: "/TournamentInfo",
+            path: "/TournamentInfo/:id",
             element: <TournamentInfo />,
+            
         },
         {
             path: "/CreateTournament",
@@ -39,6 +41,11 @@ const Router = () => {
             path: "/Round",
             element: <Round/>,
         },
+        {
+            path:"/edit/:id",
+            element: <EditPage/>
+            
+        }
     ]);
     return element;
 };

@@ -41,3 +41,29 @@ export const fetchTournamentById = async (id: string) => {
     throw error;
   }
 }
+
+export const fetchTournamentByName = async (name: string) => {
+  try {
+    const tournament = await Tournament.findOne({name: name});
+    return tournament;
+  } catch(error) {
+    throw error;
+  }
+}
+
+export const addPlayer =async (
+  player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
+  try{
+    await Tournament.findOneAndUpdate({_id: id}, {$push: {players:player}})
+  } catch(error) {
+    throw error
+  }
+}
+export const removePlayer =async (
+  player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
+  try{
+    await Tournament.findOneAndUpdate({_id: id}, {$pull: {players:player}})
+  } catch(error) {
+    throw error
+  }
+}
