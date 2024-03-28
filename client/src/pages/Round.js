@@ -185,7 +185,7 @@ const Round = () => {
         }
         // console.log(pairingSystem);
         // console.log(players);
-        
+
       })
     }
   }
@@ -203,7 +203,16 @@ const Round = () => {
       })
       console.log(players);
     }
-    
+
+  }
+
+  const updatePairings = (pairing, matchResult) => {
+    const index = pairings.findIndex((p) => p.player1 === pairing.player1);
+    const updatedPairings = { ...pairings[index], result: matchResult };
+    const newPairings = [...pairings];
+    newPairings[index] = updatedPairings;
+    setPairings(newPairings);
+    console.log(pairings);
   }
 
   if (!tournament) {
@@ -298,16 +307,13 @@ const Round = () => {
                   {pairing.player2 && <td>{pairing.player2.rating}</td>}
                   <td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
-                  // value={pairingSystem}
-                  // onChange={(e) => {
-                  //   setResult(e.target.value);
-
-                  // }}
+                    value={pairing.result}
+                    onChange={(e) => updatePairings(pairing, e.target.value)}
                   >
-                    <option disabled selected value>Select Winner</option>
+                    <option selected value>Select Winner</option>
                     <option value="1">White Won</option>
                     <option value="0.5">Draw</option>
-                    <option value="-1">Black Won</option>
+                    <option value="0">Black Won</option>
                     <option value="1F">Bye</option>
                   </select></td>
                 </TableRow>
