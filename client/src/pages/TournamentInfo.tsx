@@ -171,17 +171,21 @@ const TournamentInfo = () => {
     const [tournament, setTournament] = useState<TTournament | null>(null);
     const { id } = useParams();
     let navigate = useNavigate();
-    useEffect(() => {
+
+    const tournamentPlayers = () => {
         if (id) {
             fetchTournamentById(id).then((tournament) => {
                 setTournament(tournament);
                 if (tournament.players) {
                     setPlayers(tournament.players);
                 }
-
             })
         }
-    })
+    }
+    useEffect(() => {
+        tournamentPlayers();
+    }, [])
+
     if (!tournament) {
         return <div>fetching tournament</div>
     }
@@ -238,11 +242,13 @@ const TournamentInfo = () => {
                         <button className="px-5 py-0.5 mx-3 rounded-md bg-red"
                             onClick={async (e) => {
                                 e.preventDefault();
+
                                 await addPlayer({
                                     name: name,
                                     rating: parseInt(rating),
                                     points: 0,
                                 }, id)
+                                tournamentPlayers();
                             }}>
                             Add player
                         </button>
@@ -271,7 +277,12 @@ const TournamentInfo = () => {
                                         <td>{player.points}</td>
                                         {
                                         }
-                                        <td><Button onClick={() => deletePlayer(player, id)}>Remove</Button></td>
+                                        <td><button className="px-3 mx-1 rounded-md bg-red" onClick={() => {
+                                            deletePlayer(player, id)
+                                            tournamentPlayers();
+                                        }}>
+                                            Remove
+                                        </button></td>
                                     </TableRow>
                                 ))}
                         </tbody>
