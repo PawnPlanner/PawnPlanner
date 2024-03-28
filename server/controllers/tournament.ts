@@ -12,6 +12,16 @@ import {
     deleteTournament,
     fetchTournamentByUser,
 } from "../services/tournament"
+
+import {
+    createRound,
+    saveRound,
+    createMatch,
+    saveMatch,
+    updateResult,
+    addMatch,
+} from "../services/round"
+
 import { error } from "console";
 
 export const storeTournament = async (req: Request, res: Response) => {
@@ -107,5 +117,45 @@ export const getTournamentByUser = async (req:Request, res: Response) => {
     catch(error) {
         res.status(5005);
         res.json({error: error});
+    }
+}
+
+export const storeRound = async (req: Request, res: Response) => {
+    try {
+        const round = await createRound(req.body.round);
+        await saveRound(round);
+
+        res.status(201);
+        res.json({ msg: "success" })
+    } catch (error) {
+        console.error(error);
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+
+export const storeMatch = async (req: Request, res: Response) => {
+    try {
+        const match = await createMatch(req.body.match);
+        await saveMatch(match);
+
+        res.status(201);
+        res.json({ msg: "success" })
+    } catch (error) {
+        console.error(error);
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+
+export const editResult = async (req: Request, res: Response) => {
+    try {
+        
+        await updateResult(req.body.match);
+        res.status(201);
+        res.json({ msg: "success" })
+    } catch {
+        res.status(500);
+        res.json({ error: error });
     }
 }

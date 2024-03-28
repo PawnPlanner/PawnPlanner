@@ -10,11 +10,11 @@ export interface IMatch {
 const MatchSchema = new Schema<IMatch> (
     {
         player1: {
-            type: Player,
+            type: {},
             required: true,
         },
         player2: {
-            type: Player,
+            type: {},
             required: true,
         },
         result: {

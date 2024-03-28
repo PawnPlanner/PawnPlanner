@@ -11,7 +11,7 @@ export interface IRound {
 const RoundSchema = new Schema<IRound> (
     {
         tournament: {
-            type: Tournament,
+            type: {},
             required: true,
         },
         number: {
@@ -19,7 +19,7 @@ const RoundSchema = new Schema<IRound> (
             required: true,
         },
         matches: {
-            type: [Match],
+            type: [{}],
             required: false,
         }
     }

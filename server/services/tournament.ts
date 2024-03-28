@@ -29,7 +29,7 @@ export const saveTournament = async (
   try {
     const savedTournament = await tournament.save();
 
-    return saveTournament;
+    return savedTournament;
   } catch (error) {
     throw error;
   }
