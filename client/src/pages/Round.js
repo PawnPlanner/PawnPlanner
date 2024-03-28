@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import Navbar from "../components/navbar";
+import fetchTournamentById from "../services/fetch-tournament-id";
 
 const Container = styled.div`
   display: flex;
@@ -158,29 +159,75 @@ const ScrollBar = styled.div`
 
 
 const Round = () => {
-  // const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState([]);
+  const [tournament, setTournament] = useState({});
   const [name, setName] = useState("");
   const [rating, setRating] = useState("");
   const location = useLocation();
   const [data, setData] = useState(location.state?.data);
   const [rounds, setRounds] = useState([]);
+  const [pairingSystem, setPairingSystem] = useState([]);
   const [pairings, setPairings] = useState([]);
+
 
   // console.log(data);
 
+  const tournamentPlayers = () => {
+    if (data && data.id) {
+      fetchTournamentById(data.id).then((tournament) => {
+        setTournament(tournament);
+        console.log(tournament);
+        if (tournament && tournament.players) {
+          setPlayers(tournament.players);
+        }
+        if (tournament.pairingSystem) {
+          setPairingSystem(tournament.pairingSystem);
+        }
+        // console.log(pairingSystem);
+        // console.log(players);
+        
+      })
+    }
+  }
+  useEffect(() => {
+    tournamentPlayers();
+  }, [])
+
+  const sortPlayers = () => {
+    if (players) {
+      players.sort((a, b) => {
+        if (a.points == b.points) {
+          return b.rating - a.rating;
+        }
+        return b.points - a.points;
+      })
+      console.log(players);
+    }
+    
+  }
+
+  if (!tournament) {
+    return <div>fetching tournament</div>
+  }
+  if (!data || !data.id) {
+    return <div>fetching tournament</div>
+  }
+
+
   const createPairings = (e) => {
-    const players = data.players;
+    tournamentPlayers();
+    sortPlayers();
     if (pairings.length === 0) {
-      if (data.data.pairingSystem === "Swiss") {
+      if (pairingSystem === "Swiss") {
         const topHalf = players.slice(0, players.length / 2);
         const bottomHalf = players.slice(players.length / 2);
-        // console.log(topHalf)
-        // console.log(bottomHalf)
+        console.log(topHalf)
+        console.log(bottomHalf)
         const newPairings = [];
         for (let i = 0; i < topHalf.length; i++) {
           let newPairing = { player1: topHalf[i], player2: bottomHalf[i], result: "" };
           newPairings.push(newPairing);
-          
+
           // console.log(newPairing)
         }
 
