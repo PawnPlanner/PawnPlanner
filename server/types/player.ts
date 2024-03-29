@@ -3,4 +3,6 @@ export type TPlayer = {
     rating: number,
     points: number,
     bye: boolean,
+    matches: Array<string>,
+    _id?: string,
 }

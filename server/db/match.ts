@@ -5,6 +5,7 @@ export interface IMatch {
     player1: IPlayer,
     player2: IPlayer,
     result: string,
+   
 }
 
 const MatchSchema = new Schema<IMatch> (
@@ -21,6 +22,7 @@ const MatchSchema = new Schema<IMatch> (
             type: String,
             required: false,
         },
+       
     }
 );
 

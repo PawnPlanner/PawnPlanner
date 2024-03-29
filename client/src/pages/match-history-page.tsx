@@ -23,7 +23,9 @@ const MatchHistoryPage = () => {
         <div className="flex justify-center pt-20">
           <h1 className="text-5xl font-bold text-red">Match History for {name}</h1>
         </div>
-        
+        <div className="flex justify-center mt-4 text-xl text-navy">
+            No matches to display yet
+        </div>
       </div>
     </div>
   );

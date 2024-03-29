@@ -5,6 +5,8 @@ export interface IPlayer {
   rating: number;
   points: number;
   bye: boolean;
+  id: string;
+  matches: Array<String>
 }
 
 const PlayerSchema = new Schema<IPlayer>(
@@ -24,7 +26,15 @@ const PlayerSchema = new Schema<IPlayer>(
     bye: {
       type: Boolean,
       required: false,
-    }
+    },
+    id: {
+      type: String,
+      required: false,
+    },
+    matches: {
+      type: Array<String>(),
+      required: true,
+  }
   },
   {
     timestamps: true,
