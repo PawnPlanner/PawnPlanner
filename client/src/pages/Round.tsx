@@ -243,7 +243,6 @@ const Rounds = () => {
       newPairings[index] = updatedPairings;
       setPairings(newPairings);
       // console.log(pairings);
-
       await updateMatch(pairing, matchResult, id);
       tournamentPlayers();
     }

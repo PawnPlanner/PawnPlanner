@@ -10,6 +10,7 @@ import SettingsPage from "../pages/settings-page";
 import Round from "../pages/Round";
 import EditPage from "../pages/edit-tournament-page";
 import MyTournamentPage from "../pages/my-tournaments-page";
+import MatchHistoryPage from "../pages/match-history-page";
 
 const Router = () => {
     let element = useRoutes([
@@ -51,6 +52,10 @@ const Router = () => {
             path:"/myTournaments",
             element: <MyTournamentPage />
         },
+        {
+            path:"/matchHistory/:name",
+            element: <MatchHistoryPage />
+        }
     ]);
     return element;
 };

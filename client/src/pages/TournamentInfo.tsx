@@ -295,7 +295,9 @@ const TournamentInfo = () => {
                                 })
                                 .map((player, index) => (
                                     <TableRow key={index}>
-                                        <td>{player.name}</td>
+                                        <td onClick={async () => {
+                                            navigate(`/matchHistory/${player.name}`)
+                                        }}>{player.name}</td>
                                         <td>{player.rating}</td>
                                         <td>{player.points}</td>
                                         {
