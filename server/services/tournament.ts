@@ -47,7 +47,7 @@ export const fetchTournamentById = async (id: string) => {
 
 export const fetchTournamentByRoundId = async (id: string) => {
   try {
-    const tournament = await Tournament.findOne({roundsArray: id });
+    const tournament = await Tournament.findOne({ roundsArray: id });
     return tournament;
   } catch (error) {
     throw error;
@@ -161,6 +161,20 @@ export const removeBye = async (
         "players.name": player.name, "players.rating": player.rating
       },
       { $set: { "players.$.bye": false } })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const additionalPoints = async (
+  player: TPlayer, points: number, id: string) => {
+  try {
+    await Tournament.findOneAndUpdate(
+      {
+        roundsArray: id, "players.points": player.points,
+        "players.name": player.name, "players.rating": player.rating
+      },
+      { $inc: { "players.$.points": 1 } })
   } catch (error) {
     throw error
   }

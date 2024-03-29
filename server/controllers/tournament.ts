@@ -14,6 +14,7 @@ import {
     byeRequest,
     removeBye,
     fetchTournamentByRoundId,
+    additionalPoints,
 } from "../services/tournament"
 
 import {
@@ -262,3 +263,13 @@ export const getRoundNumber = async (req: Request, res:Response) => {
     }
 }
 
+export const addPoints = async (req: Request, res: Response) => {
+    try {
+        await additionalPoints(req.body.player, req.body.number, req.body.id);
+        res.status(201);
+        res.json({ msg: "success" });
+    } catch {
+        res.status(500);
+        res.json({ error: error });
+    }
+}
