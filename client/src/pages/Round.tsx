@@ -355,7 +355,7 @@ const Rounds = () => {
     <Container>
       <Navbar />
       <Tournament>
-        Round {data && data.index + 1}
+        Round {round?.number}
         <br></br>
         <div style={{ fontSize: "4vh" }}>
           <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
