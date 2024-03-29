@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { TTournament } from "../types/tournament";
 import { TUser } from "../types/user";
 import { TRound } from "../types/round";
+import fetchRoundNumber from "../services/fetch-round-number";
 
 
 interface IRoundProps {

@@ -13,6 +13,8 @@ import deletePlayer from "../services/delete-player";
 import deleteMatches from "../services/delete-matches";
 import { TRound } from "../types/round";
 import updateMatch from "../services/update-match";
+import { set } from "mongoose";
+import editTournament from "../services/edit-tournament";
 
 const Container = styled.div`
   display: flex;
@@ -183,6 +185,7 @@ const Rounds = () => {
   const [round, setRound] = useState<TRound>();
   const [bye, setBye] = useState<TPlayer[] | []>([]);
   const [noBye, setNoBye] = useState<TPlayer[] | []>([]);
+ 
 
   // console.log(data);
 
@@ -344,11 +347,31 @@ const Rounds = () => {
       }
     }
   }
-
+if(!round) {
+  return (
+    <div>fetching round</div>
+  )
+}
   const clearPairings = async () => {
     await deleteMatches(id);
     tournamentPlayers();
     setPairings([]);
+  }
+
+  const iscurrentRound = () => {
+    if(round.number == tournament.currentRound) {
+      return(
+        <div>Curent Round</div>
+      )
+    } else if (round.number < tournament.currentRound){
+      return (
+        <div>This round is complete</div>
+      ) 
+    } else {
+      return (
+        <div> This round has not started</div>
+      )
+    }
   }
 
   return (
@@ -356,7 +379,9 @@ const Rounds = () => {
       <Navbar />
       <Tournament>
         Round {round?.number}
+        <div>{iscurrentRound()}</div>
         <br></br>
+        
         <div style={{ fontSize: "4vh" }}>
           <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
             Create Match Pairings
@@ -365,8 +390,29 @@ const Rounds = () => {
           <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={clearPairings}>
             Delete All Match Pairings
           </button>
-
+          <button className="text-xl text-grey round-full bg-navy"
+          onClick={ async () => {
+            await editTournament({
+               _id: tournament._id,
+               name: name,
+               location: tournament.location,
+               date: tournament.date,
+               rounds: tournament.rounds,
+               pairingSystem: pairingSystem,
+               players: tournament.players,
+               owner: tournament.owner,
+               currentRound: tournament.currentRound + 1,
+             }).then(() => {
+              iscurrentRound();
+             })
+             ;
+             
+           }}
+          >
+                finish round
+              </button>
         </div>
+      
       </Tournament>
       <InnerContainer>
         <MatchPairings>
@@ -400,10 +446,13 @@ const Rounds = () => {
                   </select></td>
                 </TableRow>
               ))}
+            
             </tbody>
           </TableRow>
         </MatchPairings>
+   
       </InnerContainer >
+    
     </Container >
   )
 }

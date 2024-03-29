@@ -130,3 +130,19 @@ export const updateMatchResult = async (
         throw error
     }
 }
+
+
+export const fetchRoundNumber = async (
+    tournament: string, number: number
+) => {
+    try {
+        const tourn = await Tournament.findOne({
+            _id: tournament
+        })
+        const round = await fetchRoundById(tourn.roundsArray[number - 1].toString()) ;
+        return round;
+    }
+    catch(error) {
+     throw error
+    }
+}

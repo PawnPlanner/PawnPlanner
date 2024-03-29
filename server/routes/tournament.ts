@@ -18,6 +18,7 @@ import {
     getRounds,
     getRoundById,
     updateMatch,
+    getRoundNumber
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -42,6 +43,7 @@ router.get("/api/tournament/fetchName/:name", getTournamentByName);
 router.get("/api/myTournaments/:user", getTournamentByUser);
 router.get("/api/rounds/:id", getRounds);
 router.get("/api/round/:id", getRoundById);
+router.get("/api/tournament/:id/:number", getRoundNumber);
 
 
 

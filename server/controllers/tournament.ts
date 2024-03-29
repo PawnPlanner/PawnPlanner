@@ -27,6 +27,7 @@ import {
     fetchRoundById,
     deleteMatches,
     updateMatchResult,
+    fetchRoundNumber
 } from "../services/round"
 
 import { error } from "console";
@@ -247,6 +248,17 @@ export const updateMatch = async (req: Request, res: Response) => {
     } catch {
         res.status(500);
         res.json({ error: error });
+    }
+}
+
+export const getRoundNumber = async (req: Request, res:Response) => {
+    try {
+        const round = await fetchRoundNumber(req.params.id, parseInt(req.params.number))
+        res.status(201);
+        res.json({round: round});
+    } catch {
+        res.status(5005);
+        res.json({error: error});
     }
 }
 
