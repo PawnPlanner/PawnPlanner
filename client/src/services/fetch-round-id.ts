@@ -13,7 +13,7 @@ const fetchRoundById = async(id: string)=> {
           }).then(async (res) => {
             return res.json();
           }).then((data) => {
-            resolve(data.rounds);
+            resolve(data.round);
           })
           .catch((error) => {
             reject(error);

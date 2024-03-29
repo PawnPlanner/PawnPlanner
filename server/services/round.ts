@@ -120,7 +120,7 @@ export const fetchRoundById = async (id: string) => {
 export const updateMatchResult = async (
     match: TMatch, result: string, id: string) => {
     try {
-        console.log(id)
+        // console.log(id)
         await Round.findOneAndUpdate(
             {
                 _id: id, "matches.player1": match.player1

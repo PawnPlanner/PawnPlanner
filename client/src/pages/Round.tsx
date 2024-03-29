@@ -203,6 +203,7 @@ const Rounds = () => {
       })
       await fetchRoundById(id).then((round) => {
         setRound(round);
+        // console.log(round)
       })
       // console.log(tournament)
     }
@@ -241,6 +242,7 @@ const Rounds = () => {
       // console.log(pairings);
 
       await updateMatch(pairing, matchResult, id);
+      tournamentPlayers();
     }
   }
 
@@ -287,6 +289,7 @@ const Rounds = () => {
           newPairings.push(newPairing);
         }
         setPairings(newPairings);
+        // console.log(pairings)
         tournamentPlayers();
 
         // pairings?.map((pairing, index) => {
@@ -377,7 +380,7 @@ const Rounds = () => {
               <th>Result</th>
             </thead>
             <tbody>
-              {pairings?.map((pairing, index) => (
+              {round?.matches?.map((pairing, index) => (
                 <TableRow key={index}>
                   <td>{index + 1}</td>
                   {pairing.player1 && <td>{pairing.player1.name}</td>}
