@@ -1,4 +1,5 @@
 import { TPlayer } from "./player";
+import { TRound } from "./round";
 
 export type TTournament = {
     _id?: string;
@@ -9,5 +10,6 @@ export type TTournament = {
     pairingSystem: string;
     players?:[TPlayer];
     owner:string;
+    roundsArray?: [TRound];
 };
   

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import Player,{IPlayer} from "./player";
+import { IRound } from "./round";
 
 export interface ITournament {
     id: string;
@@ -46,8 +47,7 @@ const TournamentSchema = new Schema<ITournament>(
     owner: {
       type: String,
       required: true,
-    }
-  
+    }, 
     
   },
   {

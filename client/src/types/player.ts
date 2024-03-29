@@ -1,6 +1,6 @@
 export type TPlayer = {
     name: string;
-    rating: number,
+    rating: string,
     points: number,
   };
   

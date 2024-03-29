@@ -20,6 +20,8 @@ import {
     saveMatch,
     updateResult,
     addMatch,
+    fetchRounds,
+    fetchRoundById,
 } from "../services/round"
 
 import { error } from "console";
@@ -159,3 +161,28 @@ export const editResult = async (req: Request, res: Response) => {
         res.json({ error: error });
     }
 }
+
+export const getRounds = async (req: Request, res: Response) => {
+    try {
+        
+        const rounds = await fetchRounds(req.params.id);
+        res.status(201);
+        res.json({ rounds: rounds });
+    }
+    catch{
+        res.status(500);
+        res.json({error: error})
+    }
+}
+
+export const getRoundById = async (req: Request, res: Response) => {
+    try {
+        const round = await fetchRoundById(req.params.id);
+        res.status(201);
+        res.json({ round: round });
+    } catch (error) {
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+

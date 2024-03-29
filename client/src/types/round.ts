@@ -5,4 +5,5 @@ export type TRound = {
     tournament: TTournament;
     number: number;
     matches?:[ TMatch];
+    _id?: string;
 }

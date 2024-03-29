@@ -39,7 +39,7 @@ const Router = () => {
             element: <SettingsPage />
         },
         {
-            path: "/Round",
+            path: "/Round/:id",
             element: <Round/>,
         },
         {

@@ -10,6 +10,11 @@ import fetchTournamentById from "../services/fetch-tournament-id";
 import addPlayer from "../services/add-player";
 import deletePlayer from "../services/delete-player";
 import { Navigate } from "react-router-dom";
+import { TRound } from "../types/round";
+import fetchRounds from "../services/fetch-rounds";
+import RoundL from "../components/round-layout";
+import PlayerL from "../components/player";
+
 
 const Container = styled.div`
   display: flex;
@@ -174,25 +179,35 @@ const TournamentInfo = () => {
     const [rating, setRating] = useState("");
     const location = useLocation();
     const [tournament, setTournament] = useState<TTournament | null>(null);
+    const [rounds, setRounds] = useState<TRound[]>();
     const { id } = useParams();
     let navigate = useNavigate();
     const [byes, setByes] = useState("");
 
-    const tournamentPlayers = () => {
+    const tournamentPlayers = async () => {
         if (id) {
             fetchTournamentById(id).then((tournament) => {
                 setTournament(tournament);
                 if (tournament && tournament.players) {
                     setPlayers(tournament.players);
+                    fetchRounds(id).then((rounds) => {
+                        setRounds(rounds);
+                    })
+                   
+                }
+            }).then(() => {
+                if(tournament) {
+                   
                 }
             })
+           
         }
     }
     useEffect(() => {
         tournamentPlayers();
     }, [])
 
-    if (!tournament) {
+    if (!tournament || !rounds ) {
         return <div>fetching tournament</div>
     }
     if (!id) {
@@ -251,7 +266,7 @@ const TournamentInfo = () => {
 
                                 await addPlayer({
                                     name: name,
-                                    rating: parseInt(rating),
+                                    rating: rating,
                                     points: 0,
                                 }, id)
                                 tournamentPlayers();
@@ -268,29 +283,24 @@ const TournamentInfo = () => {
                             <th>Points</th>
                             <th>Options</th>
                         </thead>
-                        <tbody>
+                        <tbody className="grid w-full grid-flow-col grid-flow-col-2">
                             {players
                                 .sort((a, b) => {
                                     if (a.points == b.points) {
-                                        return b.rating - a.rating;
+                                        return parseInt(b.rating) - parseInt(a.rating);
                                     }
                                     return b.points - a.points;
                                 })
-                                .map((player, index) => (
-                                    <TableRow key={index}>
-                                        <td>{player.name}</td>
-                                        <td>{player.rating}</td>
-                                        <td>{player.points}</td>
-                                        {
-                                        }
-                                        <td><button className="px-3 mx-1 rounded-md bg-red" onClick={() => {
-                                            deletePlayer(player, id);
-                                            tournamentPlayers();
-                                        }}>
-                                            Remove
-                                        </button></td>
-                                    </TableRow>
-                                ))}
+                                .map((player) => {
+                                    return(
+                                        <div className="col-span-4 col-start-1">
+                                        <PlayerL
+                                            player={player}
+                                            id={id}
+                                        />
+                                        </div>
+                                    )
+                                })}
                         </tbody>
                     </TableRow>
                     {/* </ScrollBar> */}
@@ -301,21 +311,14 @@ const TournamentInfo = () => {
                     <Heading>
                         Rounds
                     </Heading>
-                    {Array.from({ length: parseInt(tournament.rounds) }).map(
-                        (element, index) =>
-                            <p>
-                                Round {index + 1}
-                                {players && <Link
-                                    to="/Round"
-                                    state={{ data: { index, id } }}
-                                >
-                                    <Edit>
-                                        Edit
-                                    </Edit>
-                                </Link>}
-
-                            </p>
-                    )}
+                    {rounds
+                        .map((round) => {
+                            return(
+                                <RoundL
+                                    round={round}
+                                />
+                            )
+                        })}
                     {/* </ScrollBar> */}
                 </Rounds>
                 <ByeQueue>

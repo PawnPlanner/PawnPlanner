@@ -1,4 +1,5 @@
 import { TPlayer } from "./player";
+import { TRound } from "./round";
 
 export type TTournament = {
     _id?: string,

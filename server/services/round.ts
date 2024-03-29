@@ -13,6 +13,7 @@ import { TMatch } from "../types/match";
 import Match from "../db/match";
 import { IMatch } from "../db/match";
 import { match } from "assert";
+import { fetchTournamentById } from "./tournament";
 
 export const createRound = async (
     newRound: TRound
@@ -72,5 +73,28 @@ export const addMatch = async (
     match:  mongoose.Document<unknown, any, IMatch>,
     round:  mongoose.Document<unknown, any, IRound>,
 ) => {
-    await Round.findOneAndUpdate({round}, {$push: {matches: match}})
+    await Round.findOneAndUpdate({round}, {$push: {matches: match}});
 }
+
+export const fetchRounds = async (
+    id: string
+) => {
+    try {
+        const tournament = await fetchTournamentById(id);
+        console.log(tournament.name);
+        const rounds = await Round.find({Tournament}, {id});
+        console.log(tournament.name);
+        return rounds;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const fetchRoundById = async (id: string) => {
+    try {
+      const round = await Round.findOne({ _id: id });
+      return round;
+    } catch (error) {
+      throw error;
+    }
+  }

@@ -10,6 +10,7 @@ import { async } from "q";
 import fetchTournamentByName from "../services/fetch-tournament-by-name";
 import { TUser } from "../types/user";
 import Session from "../session";
+import createRound from "../services/create-round";
 
 
 
@@ -129,13 +130,20 @@ const CreateTournament = () => {
                 rounds: rounds,
                 owner: user.username
               }).then(async () => {
-                const tourn = await fetchTournamentByName(name)
-                if(tourn){
-                 
-                  setTimeout(() => {
-                    navigate(`/TournamentInfo/${tourn._id}`);
-                  }, 200)
-                } 
+                await fetchTournamentByName(name).then(async (tourn) => {
+                  if(tourn){
+                    for(let i = 1; i <= parseInt(rounds); i++) {
+                      await createRound({
+                        number: i,
+                        tournament: tourn,
+                      })
+                    }
+                    setTimeout(() => {
+                      navigate(`/TournamentInfo/${tourn._id}`);
+                    }, 200)
+                  } 
+                })
+               
               })
             }}
             >
