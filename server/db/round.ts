@@ -3,7 +3,7 @@ import Tournament, { ITournament } from "./tournament";
 import Match, { IMatch } from "./match";
 
 export interface IRound {
-    tournament: ITournament,
+    
     number: number,
     matches:[IMatch],
     id: string,
@@ -11,10 +11,7 @@ export interface IRound {
 
 const RoundSchema = new Schema<IRound> (
     {
-        tournament: {
-            type: {},
-            required: true,
-        },
+       
         number: {
             type: Number,
             required: true,

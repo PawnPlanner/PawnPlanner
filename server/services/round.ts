@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { ObjectId } from "mongoose";
 
 // import packages
 import { TokenPayload } from "google-auth-library";
@@ -14,14 +14,21 @@ import Match from "../db/match";
 import { IMatch } from "../db/match";
 import { match } from "assert";
 import { fetchTournamentById } from "./tournament";
+import { assert } from "console";
 
 export const createRound = async (
-    newRound: TRound
+    newRound: TRound,
+    ID: string,
 ) : Promise<mongoose.Document<unknown, any, IRound>> => {
     const round = new Round({
-        tournament: newRound.tournament,
+        
         number: newRound.number,
     })
+   let tourn = await Tournament.findOne({_id: ID}, "roundsArray");
+    let rounds = tourn.roundsArray;
+    rounds.push(round._id.toString());
+    await Tournament.findByIdAndUpdate(ID,{roundsArray: rounds});
+  
     return round;
 };
 
@@ -30,6 +37,7 @@ export const saveRound = async (
 ) => {
     try {
       const savedRound = await round.save();
+      
       return savedRound;
     } catch (error) {
         throw error;
@@ -81,9 +89,7 @@ export const fetchRounds = async (
 ) => {
     try {
         const tournament = await fetchTournamentById(id);
-        console.log(tournament.name);
-        const rounds = await Round.find({Tournament}, {id});
-        console.log(tournament.name);
+        const rounds = tournament.roundsArray;
         return rounds;
     } catch (error) {
         throw error;

@@ -335,6 +335,7 @@ const TournamentInfo = () => {
                             return(
                                 <RoundL
                                     round={round}
+                                    tournament={tournament}
                                 />
                             )
                         })}

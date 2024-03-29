@@ -162,7 +162,7 @@ const ScrollBar = styled.div`
 
 
 
-const Roundss = () => {
+const Rounds = () => {
   const [players, setPlayers] = useState<TPlayer[] | []>([]);
   const [tournament, setTournament] = useState<TTournament | null>(null);
   const [name, setName] = useState("");
@@ -180,19 +180,15 @@ const Roundss = () => {
   const tournamentPlayers = async () => {
 
     if (id) {
-      fetchRoundById(id).then((round) => {
-        setTournament(round.tournament);
-        if (tournament && tournament.players) {
-          setPlayers(tournament.players);
-          if (tournament.pairingSystem) {
-            setPairingSystem(tournament.pairingSystem);
-          }
+     fetchTournamentById(id).then((tournament) => {
+      setTournament(tournament);
+      if (tournament && tournament.players) {
+        setPlayers(tournament.players);
+        if (tournament.pairingSystem) {
+          setPairingSystem(tournament.pairingSystem);
         }
-       
-        // console.log(pairingSystem);
-        // console.log(players);
-
-      })
+      }
+     })
     }
   }
   useEffect(() => {
@@ -226,9 +222,7 @@ const Roundss = () => {
   if (!tournament) {
     return <div>fetching tournament</div>
   }
-  if (!data || !data.id) {
-    return <div>fetching tournament</div>
-  }
+  
 
 
   const createPairings = () => {
@@ -253,8 +247,9 @@ const Roundss = () => {
         if (bottomHalf.length > topHalf.length) {
           setMatch({
             player1:bottomHalf[bottomHalf.length - 1],
-            player2: {name:'bye', rating:"N/A", points:0},
-            result:""
+            player2: {name:'bye', rating:"N/A", points:0, bye:true},
+            result:"",
+            
           })
          // let newPairing = { player1: bottomHalf[bottomHalf.length - 1], player2: { name: "bye", rating: "N/A" }, result: "" };
           if(match) {
@@ -277,7 +272,7 @@ const Roundss = () => {
           }
           setMatch({
             player1:players[0],
-            player2: {name:'bye', rating:"N/A", points:0},
+            player2: {name:'bye', rating:"N/A", points:0, bye:true},
             result:""
           })
           //const newPairing = { player1: players[0], player2: { name: "bye", rating: "N/A" }, result: "" };
@@ -349,4 +344,4 @@ const Roundss = () => {
   )
 }
 
-export default Roundss;
+export default Rounds;

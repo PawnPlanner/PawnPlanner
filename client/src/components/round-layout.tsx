@@ -5,7 +5,8 @@ import { TRound } from "../types/round";
 
 
 interface IRoundProps {
-  round:TRound
+  round:TRound,
+  tournament:TTournament,
 }
 
 const RoundL = (props: IRoundProps) => {
@@ -15,9 +16,10 @@ const RoundL = (props: IRoundProps) => {
         <div className="w-full bg-navy">
             <button className="grid grid-flow-row p-6 text-justify" 
             onClick={() => {
-                navigate(`/Round/${props.round._id}`)
+                navigate(`/Round/${props.tournament._id}`)
             }}>
-                <span className="mr-5 text-2xl text-lred"> Round {props.round.number}</span>   
+                <span className="mr-5 text-2xl text-lred"> Round </span>   
+                <span>{props.round.number}</span>
             
             </button>
         </div>

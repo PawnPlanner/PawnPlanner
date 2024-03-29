@@ -11,6 +11,7 @@ export interface ITournament {
     pairingSystem: string;
     players:[IPlayer];
     owner:string;
+    roundsArray:Array<String>;
 }
 
 const TournamentSchema = new Schema<ITournament>(
@@ -48,6 +49,10 @@ const TournamentSchema = new Schema<ITournament>(
       type: String,
       required: true,
     }, 
+    roundsArray: {
+      type: Array<String>(),
+      required: true,
+    }
     
   },
   {

@@ -11,6 +11,7 @@ import fetchTournamentByName from "../services/fetch-tournament-by-name";
 import { TUser } from "../types/user";
 import Session from "../session";
 import createRound from "../services/create-round";
+import { parseArgs } from "util";
 
 
 
@@ -131,12 +132,12 @@ const CreateTournament = () => {
                 owner: user.username
               }).then(async () => {
                 await fetchTournamentByName(name).then(async (tourn) => {
-                  if(tourn){
+                  if(tourn._id){
                     for(let i = 1; i <= parseInt(rounds); i++) {
                       await createRound({
                         number: i,
-                        tournament: tourn,
-                      })
+                        
+                      }, tourn._id)
                     }
                     setTimeout(() => {
                       navigate(`/TournamentInfo/${tourn._id}`);

@@ -126,7 +126,7 @@ export const getTournamentByUser = async (req:Request, res: Response) => {
 
 export const storeRound = async (req: Request, res: Response) => {
     try {
-        const round = await createRound(req.body.round);
+        const round = await createRound(req.body.round, req.body.Id);
         await saveRound(round);
 
         res.status(201);

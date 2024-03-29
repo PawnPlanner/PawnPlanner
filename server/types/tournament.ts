@@ -10,4 +10,5 @@ export type TTournament = {
     pairingSystem: string,
     players?: [TPlayer],
     owner: string,
+    roundsArray: Array<string>,
 }

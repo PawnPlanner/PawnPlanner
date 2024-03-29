@@ -1,6 +1,6 @@
 import { TRound } from "../types/round";
 
-const createRound = async(round: TRound)=> {
+const createRound = async(round: TRound, id:string )=> {
     return new Promise(async (resolve, reject) => {
         try {
           await fetch(`${process.env.REACT_APP_API}/api/tournament/newRound`, {
@@ -8,6 +8,7 @@ const createRound = async(round: TRound)=> {
             credentials: "include",
             body: JSON.stringify({
               round: round,
+              Id: id,
             }),
             headers: {
               "Content-Type": "application/json",
