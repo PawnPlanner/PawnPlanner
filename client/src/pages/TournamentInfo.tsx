@@ -15,6 +15,8 @@ import fetchRounds from "../services/fetch-rounds";
 import RoundL from "../components/round-layout";
 import PlayerL from "../components/player";
 
+import byeSignup from "../services/bye-signup";
+import byeRemoval from "../services/bye-removal";
 
 const Container = styled.div`
   display: flex;
@@ -263,11 +265,11 @@ const TournamentInfo = () => {
                         <button className="px-5 py-0.5 mx-3 rounded-md bg-red"
                             onClick={async (e) => {
                                 e.preventDefault();
-
                                 await addPlayer({
                                     name: name,
                                     rating: rating,
                                     points: 0,
+                                    bye: false
                                 }, id)
                                 tournamentPlayers();
                             }}>
@@ -291,16 +293,33 @@ const TournamentInfo = () => {
                                     }
                                     return b.points - a.points;
                                 })
-                                .map((player) => {
-                                    return(
-                                        <div className="col-span-4 col-start-1">
-                                        <PlayerL
-                                            player={player}
-                                            id={id}
-                                        />
-                                        </div>
-                                    )
-                                })}
+                                .map((player, index) => (
+                                    <TableRow key={index}>
+                                        <td>{player.name}</td>
+                                        <td>{player.rating}</td>
+                                        <td>{player.points}</td>
+                                        {
+                                        }
+                                        <td className="flex justify-between">
+                                            <button className="px-1 mx-1 text-sm rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault();
+                                                    await deletePlayer(player, id);
+                                                    tournamentPlayers();
+                                                }}>
+                                                Remove
+                                            </button>
+                                            <button className="px-1 mx-1 text-sm rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault()
+                                                    console.log(players)
+                                                    await byeSignup(player, id)
+                                                    tournamentPlayers();
+                                                }}>
+                                                Bye Signup
+                                            </button></td>
+                                    </TableRow>
+                                ))}
                         </tbody>
                     </TableRow>
                     {/* </ScrollBar> */}
@@ -325,6 +344,31 @@ const TournamentInfo = () => {
                     <Heading>
                         Bye Queue
                     </Heading>
+
+                    <TableRow className = "mx-auto">
+                        <thead>
+                            <th>Name</th>
+                            <th>Options</th>
+                        </thead>
+                        <tbody>
+                            {players.filter((player) => player.bye)
+                                .map((player, index) => (
+                                    <TableRow key={index} >
+                                        <td>{player.name}</td>
+                                        <td> <button className="px-2 py-1 mx-1 text-sm rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault()
+                                                    await byeRemoval(player, id)
+                                                    tournamentPlayers();
+                                                }}>
+                                                Remove
+                                            </button>
+                                            </td>
+                                    </TableRow>
+                                ))}
+                        </tbody>
+                    </TableRow>
+
                 </ByeQueue>
             </InnerContainer>
         </Container>

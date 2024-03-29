@@ -74,15 +74,23 @@ export const addPlayer = async (
   }
 }
 export const removePlayer = async (
-  player: TPlayer) => {
+  player: TPlayer, id: string) => {
   try {
-    await Player.findOneAndDelete(player);
+    await Tournament.findOneAndUpdate({ _id: id }, {
+      $pull: {
+        players: {
+          name: player.name,
+          rating: player.rating,
+          points: player.points
+        }
+      }
+    })
   } catch (error) {
     throw error;
   }
 }
 
-export const updateTournament = async(
+export const updateTournament = async (
   tournament: TTournament
 ) => {
   try {
@@ -95,13 +103,13 @@ export const updateTournament = async(
       players: tournament.players,
       owner: tournament.owner,
     });
-   
+
   } catch (error) {
     throw error;
   }
 }
 
-export const deleteTournament = async(tournament: TTournament) => {
+export const deleteTournament = async (tournament: TTournament) => {
   try {
     await Tournament.findByIdAndDelete(tournament._id);
   } catch (error) {
@@ -109,12 +117,40 @@ export const deleteTournament = async(tournament: TTournament) => {
   }
 };
 
-export const fetchTournamentByUser = async(user: string) => {
+export const fetchTournamentByUser = async (user: string) => {
   try {
-    const tournaments = await Tournament.find({owner: user});
+    const tournaments = await Tournament.find({ owner: user });
     return tournaments;
-  } catch(error) {
-    throw(error);
+  } catch (error) {
+    throw (error);
   }
 
+}
+
+export const byeRequest = async (
+  player: TPlayer, id: string) => {
+  try {
+    await Tournament.findOneAndUpdate(
+      {
+        _id: id, "players.points": player.points,
+        "players.name": player.name, "players.rating": player.rating
+      },
+      { $set: { "players.$.bye": true } })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const removeBye = async (
+  player: TPlayer, id: string) => {
+  try {
+    await Tournament.findOneAndUpdate(
+      {
+        _id: id, "players.points": player.points,
+        "players.name": player.name, "players.rating": player.rating
+      },
+      { $set: { "players.$.bye": false } })
+  } catch (error) {
+    throw error
+  }
 }

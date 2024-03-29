@@ -168,7 +168,8 @@ const Round = () => {
   const [rounds, setRounds] = useState([]);
   const [pairingSystem, setPairingSystem] = useState([]);
   const [pairings, setPairings] = useState([]);
-
+  const [bye, setBye] = useState([]);
+  const [noBye, setNoBye] = useState([]);
 
   // console.log(data);
 
@@ -179,6 +180,13 @@ const Round = () => {
         console.log(tournament);
         if (tournament && tournament.players) {
           setPlayers(tournament.players);
+          if (players) {
+            setBye(players.filter((player) => player.bye))
+            setNoBye(players.filter((player) => !player.bye))
+          }
+          // console.log(players)
+          // console.log(bye)
+          // console.log(noBye)
         }
         if (tournament.pairingSystem) {
           setPairingSystem(tournament.pairingSystem);
@@ -194,19 +202,19 @@ const Round = () => {
   }, [])
 
   const sortPlayers = () => {
-    if (players) {
-      players.sort((a, b) => {
+    if (noBye) {
+      noBye.sort((a, b) => {
         if (a.points == b.points) {
           return b.rating - a.rating;
         }
         return b.points - a.points;
       })
-      console.log(players);
+      // console.log(players);
     }
 
   }
 
-  const updatePairings = (pairing, matchResult) => {
+  const updateResult = (pairing, matchResult) => {
     const index = pairings.findIndex((p) => p.player1 === pairing.player1);
     const updatedPairings = { ...pairings[index], result: matchResult };
     const newPairings = [...pairings];
@@ -228,8 +236,8 @@ const Round = () => {
     sortPlayers();
     if (pairings.length === 0) {
       if (pairingSystem === "Swiss") {
-        const topHalf = players.slice(0, players.length / 2);
-        const bottomHalf = players.slice(players.length / 2);
+        const topHalf = noBye.slice(0, noBye.length / 2);
+        const bottomHalf = noBye.slice(noBye.length / 2);
         console.log(topHalf)
         console.log(bottomHalf)
         const newPairings = [];
@@ -244,21 +252,25 @@ const Round = () => {
           let newPairing = { player1: bottomHalf[bottomHalf.length - 1], player2: { name: "bye", rating: "N/A" }, result: "" };
           newPairings.push(newPairing);
         }
+        for (let i = 0; i < bye.length; i++) {
+          let newPairing = { player1: bye[i], player2: { name: "bye", rating: "N/A" }, result: "" };
+          newPairings.push(newPairing);
+        }
         setPairings(newPairings);
       }
       else {
         const newPairings = [];
-        if (players.length % 2 === 0) {
-          for (let i = 0; i < players.length / 2; i++) {
-            const newPairing = { player1: players[i], player2: players[players.length - 1 - i], result: "" };
+        if (noBye.length % 2 === 0) {
+          for (let i = 0; i < noBye.length / 2; i++) {
+            const newPairing = { player1: noBye[i], player2: noBye[noBye.length - 1 - i], result: "" };
             newPairings.push(newPairing);
           }
         } else {
-          for (let i = 1; i < players.length / 2; i++) {
-            const newPairing = { player1: players[i], player2: players[players.length - i], result: "" };
+          for (let i = 1; i < noBye.length / 2; i++) {
+            const newPairing = { player1: noBye[i], player2: noBye[noBye.length - i], result: "" };
             newPairings.push(newPairing);
           }
-          const newPairing = { player1: players[0], player2: { name: "bye", rating: "N/A" }, result: "" };
+          const newPairing = { player1: noBye[0], player2: { name: "bye", rating: "N/A" }, result: "" };
           newPairings.push(newPairing);
         }
         setPairings(newPairings);
@@ -308,7 +320,7 @@ const Round = () => {
                   <td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
-                    onChange={(e) => updatePairings(pairing, e.target.value)}
+                    onChange={(e) => updateResult(pairing, e.target.value)}
                   >
                     <option selected value>Select Winner</option>
                     <option value="1">White Won</option>
