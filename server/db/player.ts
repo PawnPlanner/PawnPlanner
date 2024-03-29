@@ -23,7 +23,7 @@ const PlayerSchema = new Schema<IPlayer>(
     },
     bye: {
       type: Boolean,
-      required: true,
+      required: false,
     }
   },
   {
