@@ -300,6 +300,7 @@ const Rounds = () => {
             player1: bottomHalf[bottomHalf.length - 1],
             player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: ""
           };
+    
           await createMatch(newPairing, id);
           newPairings.push(newPairing);
         }
