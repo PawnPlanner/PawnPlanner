@@ -78,7 +78,9 @@ export const createPlayer = async (
 export const addPlayer = async (
   player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
   try {
+    const savedPlayer =  await player.save();
     await Tournament.findOneAndUpdate({ _id: id }, { $push: { players: player } })
+    return savedPlayer;
   } catch (error) {
     throw error
   }
