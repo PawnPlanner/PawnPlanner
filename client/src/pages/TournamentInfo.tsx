@@ -11,6 +11,7 @@ import addPlayer from "../services/add-player";
 import deletePlayer from "../services/delete-player";
 import { Navigate } from "react-router-dom";
 import byeSignup from "../services/bye-signup";
+import byeRemoval from "../services/bye-removal";
 
 const Container = styled.div`
   display: flex;
@@ -336,16 +337,29 @@ const TournamentInfo = () => {
                         Bye Queue
                     </Heading>
 
-                    <table>
+                    <TableRow className = "mx-auto">
+                        <thead>
+                            <th>Name</th>
+                            <th>Options</th>
+                        </thead>
                         <tbody>
                             {players.filter((player) => player.bye)
                                 .map((player, index) => (
-                                    <tr key={index} >
+                                    <TableRow key={index} >
                                         <td>{player.name}</td>
-                                    </tr>
+                                        <td> <button className="text-sm px-2 py-1 mx-1 rounded-md bg-red"
+                                                onClick={async (e) => {
+                                                    e.preventDefault()
+                                                    await byeRemoval(player, id)
+                                                    tournamentPlayers();
+                                                }}>
+                                                Remove
+                                            </button>
+                                            </td>
+                                    </TableRow>
                                 ))}
                         </tbody>
-                    </table>
+                    </TableRow>
 
                 </ByeQueue>
             </InnerContainer>

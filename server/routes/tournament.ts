@@ -10,6 +10,7 @@ import {
     removeTournament,
     getTournamentByUser,
     byeSignup,
+    byeRemoval,
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -20,6 +21,7 @@ router.post("/api/maketournament", storeTournament);
 router.post("/api/tournament/addplayer", additionalPlayer);
 router.post("/api/tournament/removeplayer", deletePlayer);
 router.post("/api/tournament/bye", byeSignup);
+router.post("/api/tournament/byeRemoval", byeRemoval);
 router.post("/api/tournament/edit", editTournament);
 router.post("/api/deleteTournament", removeTournament);
 

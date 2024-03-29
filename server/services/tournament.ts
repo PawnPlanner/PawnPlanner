@@ -140,3 +140,17 @@ export const byeRequest = async (
     throw error
   }
 }
+
+export const removeBye = async (
+  player: TPlayer, id: string) => {
+  try {
+    await Tournament.findOneAndUpdate(
+      {
+        _id: id, "players.points": player.points,
+        "players.name": player.name, "players.rating": player.rating
+      },
+      { $set: { "players.$.bye": false } })
+  } catch (error) {
+    throw error
+  }
+}

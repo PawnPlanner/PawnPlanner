@@ -12,6 +12,7 @@ import {
     deleteTournament,
     fetchTournamentByUser,
     byeRequest,
+    removeBye,
 } from "../services/tournament"
 
 import {
@@ -165,6 +166,18 @@ export const byeSignup = async (req: Request, res: Response) => {
     try {
         
         await byeRequest(req.body.player, req.body.id);
+        res.status(201);
+        res.json({ msg: "success" })
+    } catch {
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+
+export const byeRemoval = async (req: Request, res: Response) => {
+    try {
+        
+        await removeBye(req.body.player, req.body.id);
         res.status(201);
         res.json({ msg: "success" })
     } catch {

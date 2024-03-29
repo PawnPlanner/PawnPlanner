@@ -201,7 +201,7 @@ const Round = () => {
         }
         return b.points - a.points;
       })
-      console.log(players);
+      // console.log(players);
     }
 
   }
