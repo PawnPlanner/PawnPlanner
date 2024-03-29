@@ -12,6 +12,7 @@ export interface ITournament {
     players:[IPlayer];
     owner:string;
     roundsArray:Array<String>;
+    currentRound: number
 }
 
 const TournamentSchema = new Schema<ITournament>(
@@ -51,6 +52,10 @@ const TournamentSchema = new Schema<ITournament>(
     }, 
     roundsArray: {
       type: Array<String>(),
+      required: true,
+    },
+    currentRound: {
+      type: Number,
       required: true,
     }
     

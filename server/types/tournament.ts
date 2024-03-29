@@ -11,4 +11,5 @@ export type TTournament = {
     players?: [TPlayer],
     owner: string,
     roundsArray: Array<string>,
+    currentRound: number,
 }

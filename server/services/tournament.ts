@@ -18,6 +18,7 @@ export const createtournament = async (
     pairingSystem: newTournament.pairingSystem,
     date: newTournament.date,
     owner: newTournament.owner,
+    currentRound: newTournament.currentRound,
   });
 
   return tournament;
@@ -102,6 +103,7 @@ export const updateTournament = async (
       pairingSystem: tournament.pairingSystem,
       players: tournament.players,
       owner: tournament.owner,
+      currentRound: tournament.currentRound,
     });
 
   } catch (error) {

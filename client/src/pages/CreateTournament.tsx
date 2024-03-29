@@ -129,7 +129,8 @@ const CreateTournament = () => {
                 date: startDate,
                 pairingSystem: pairingSystem,
                 rounds: rounds,
-                owner: user.username
+                owner: user.username,
+                currentRound: 1,
               }).then(async () => {
                 await fetchTournamentByName(name).then(async (tourn) => {
                   if(tourn._id){

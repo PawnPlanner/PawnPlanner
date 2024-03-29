@@ -285,7 +285,7 @@ const TournamentInfo = () => {
                             <th>Points</th>
                             <th>Options</th>
                         </thead>
-                        <tbody className="grid w-full grid-flow-col grid-flow-col-2">
+                        <tbody className="w-full ">
                             {players
                                 .sort((a, b) => {
                                     if (a.points == b.points) {

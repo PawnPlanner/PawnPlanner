@@ -11,5 +11,6 @@ export type TTournament = {
     players?:[TPlayer];
     owner:string;
     roundsArray?: [TRound];
+    currentRound: number;
 };
   

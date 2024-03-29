@@ -174,6 +174,7 @@ const Rounds = () => {
   const [pairings, setPairings] = useState<TMatch[] | null>(null);
   const [match, setMatch]= useState<TMatch | null>(null);
   const {id} = useParams();
+  const [round, setRound] = useState(false);
 
   // console.log(data);
 
@@ -184,6 +185,7 @@ const Rounds = () => {
       setTournament(tournament);
       if (tournament && tournament.players) {
         setPlayers(tournament.players);
+        
         if (tournament.pairingSystem) {
           setPairingSystem(tournament.pairingSystem);
         }
@@ -302,6 +304,7 @@ const Rounds = () => {
           <Button onClick={clearPairings}>
             Delete All Match Pairings
           </Button>
+
         </div>
       </Tournament>
       <InnerContainer>

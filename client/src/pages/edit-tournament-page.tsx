@@ -152,6 +152,7 @@ const EditPage = () => {
                 pairingSystem: pairingSystem,
                 players: tournament.players,
                 owner: tournament.owner,
+                currentRound: tournament.currentRound,
               })
               .then (async(res) => {
                 setTimeout(() => {
@@ -177,6 +178,7 @@ const EditPage = () => {
                     pairingSystem: tournament.pairingSystem,
                     players: tournament.players,
                     owner: user.username,
+                    currentRound: tournament.currentRound,
                 })
                 .then( async() => {
                     navigate('/');
