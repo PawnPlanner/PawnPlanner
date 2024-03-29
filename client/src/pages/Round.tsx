@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/navbar";
 import fetchTournamentById from "../services/fetch-tournament-id";
 import fetchRoundById from "../services/fetch-round-id";
@@ -186,7 +186,7 @@ const Rounds = () => {
   const [bye, setBye] = useState<TPlayer[] | []>([]);
   const [noBye, setNoBye] = useState<TPlayer[] | []>([]);
  
-
+  let navigate = useNavigate();
   // console.log(data);
 
   const tournamentPlayers = async () => {
@@ -361,22 +361,31 @@ if(!round) {
   const iscurrentRound = () => {
     if(round.number == tournament.currentRound) {
       return(
-        <div>Curent Round</div>
+        <div className="text-xl">Curent Round</div>
       )
     } else if (round.number < tournament.currentRound){
       return (
-        <div>This round is complete</div>
+        <div className="text-xl">This round is complete</div>
       ) 
     } else {
       return (
-        <div> This round has not started</div>
+        <div className="text-xl"> This round has not started</div>
       )
     }
   }
+  
 
   return (
     <Container>
       <Navbar />
+      <div className="w-full pt-4 pl-4 bg-lgrey"> 
+      <button className="p-3 text-xl rounded-full bg-navy text-grey w-1/8" onClick={(async () => 
+               navigate(`/TournamentInfo/${tournament._id}`)
+              )}>
+Back 
+            </button>
+      </div>
+
       <Tournament>
         Round {round?.number}
         <div>{iscurrentRound()}</div>
