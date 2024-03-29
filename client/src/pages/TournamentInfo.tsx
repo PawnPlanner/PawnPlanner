@@ -188,7 +188,7 @@ const TournamentInfo = () => {
 
     const tournamentPlayers = async () => {
         if (id) {
-            fetchTournamentById(id).then((tournament) => {
+            await fetchTournamentById(id).then((tournament) => {
                 setTournament(tournament);
                 if (tournament && tournament.players) {
                     setPlayers(tournament.players);
@@ -331,9 +331,10 @@ const TournamentInfo = () => {
                         Rounds
                     </Heading>
                     {rounds
-                        .map((round) => {
+                        .map((round, index) => {
                             return(
                                 <RoundL
+                                    number = {index}
                                     round={round}
                                     tournament={tournament}
                                 />

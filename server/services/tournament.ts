@@ -45,6 +45,15 @@ export const fetchTournamentById = async (id: string) => {
   }
 }
 
+export const fetchTournamentByRoundId = async (id: string) => {
+  try {
+    const tournament = await Tournament.findOne({roundsArray: id });
+    return tournament;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const fetchTournamentByName = async (name: string) => {
   try {
     const tournament = await Tournament.findOne({ name: name });

@@ -7,6 +7,11 @@ import fetchRoundById from "../services/fetch-round-id";
 import { TTournament } from "../types/tournament";
 import { TMatch } from "../types/match";
 import { TPlayer } from "../types/player";
+import createMatch from "../services/create-match";
+import fetchTournamentByRoundId from "../services/fetch-tournament-by-round-id";
+import deletePlayer from "../services/delete-player";
+import deleteMatches from "../services/delete-matches";
+import { TRound } from "../types/round";
 
 const Container = styled.div`
   display: flex;
@@ -172,96 +177,144 @@ const Rounds = () => {
   const [rounds, setRounds] = useState([]);
   const [pairingSystem, setPairingSystem] = useState("");
   const [pairings, setPairings] = useState<TMatch[] | null>(null);
-  const [match, setMatch]= useState<TMatch | null>(null);
-  const {id} = useParams();
-  const [round, setRound] = useState(false);
+  const [match, setMatch] = useState<TMatch | null>(null);
+  const { id } = useParams();
+  const [round, setRound] = useState<TRound>();
+  const [bye, setBye] = useState<TPlayer[] | []>([]);
+  const [noBye, setNoBye] = useState<TPlayer[] | []>([]);
 
   // console.log(data);
 
   const tournamentPlayers = async () => {
-
     if (id) {
-     fetchTournamentById(id).then((tournament) => {
-      setTournament(tournament);
-      if (tournament && tournament.players) {
-        setPlayers(tournament.players);
-        
-        if (tournament.pairingSystem) {
-          setPairingSystem(tournament.pairingSystem);
+      await fetchTournamentByRoundId(id).then((tournament) => {
+        setTournament(tournament);
+        if (tournament && tournament.players) {
+          setPlayers(tournament.players);
+          if (players) {
+            setBye(players.filter((player) => player.bye))
+            setNoBye(players.filter((player) => !player.bye))
+          }
+          if (tournament.pairingSystem) {
+            setPairingSystem(tournament.pairingSystem);
+          }
         }
-      }
-     })
+      })
+      await fetchRoundById(id).then((round) => {
+        setRound(round);
+      })
+      console.log(tournament)
     }
   }
   useEffect(() => {
     tournamentPlayers();
   }, [])
 
+  if (!tournament) {
+    return <div>fetching tournament</div>
+  }
+  if (!id) {
+    return <div>fetching tournament</div>
+  }
+
   const sortPlayers = () => {
-    if (players) {
-      players.sort((a, b) => {
+    if (noBye) {
+      noBye.sort((a, b) => {
         if (a.points == b.points) {
           return parseInt(b.rating) - parseInt(a.rating);
         }
         return b.points - a.points;
       })
-      console.log(players);
+      // console.log(players);
     }
 
   }
 
-  const updatePairings = (pairing: TMatch, matchResult: string) => {
-    if(pairings) {
-    const index = pairings.findIndex((p) => p.player1 === pairing.player1);
-    const updatedPairings = { ...pairings[index], result: matchResult };
-    const newPairings = [...pairings];
-    newPairings[index] = updatedPairings;
-    setPairings(newPairings);
-    console.log(pairings);
+  const updateResult = (pairing: TMatch, matchResult: string) => {
+    if (pairings) {
+      const index = pairings.findIndex((p) => p.player1 === pairing.player1);
+      const updatedPairings = { ...pairings[index], result: matchResult };
+      const newPairings = [...pairings];
+      newPairings[index] = updatedPairings;
+      setPairings(newPairings);
+      console.log(pairings);
     }
   }
 
   if (!tournament) {
     return <div>fetching tournament</div>
   }
-  
 
+  // const createMatches = async (pairing: TMatch) => {
+  //   await createMatch(pairing, id);
+  // }
 
-  const createPairings = () => {
-    tournamentPlayers();
+  const createPairings = async () => {
+    // tournamentPlayers();
     sortPlayers();
-    if(!pairings) {return}
-    if (pairings.length === 0) {
+    // console.log(players)
+    // if (!pairings) { return }
+    // console.log(pairings)
+    if (!pairings || pairings.length === 0) {
       if (pairingSystem === "Swiss") {
-        const topHalf = players.slice(0, players.length / 2);
-        const bottomHalf = players.slice(players.length / 2);
-        console.log(topHalf)
-        console.log(bottomHalf)
-        let newPairings:TMatch[] = [];
+        const topHalf = noBye.slice(0, noBye.length / 2);
+        const bottomHalf = noBye.slice(noBye.length / 2);
+        // console.log(topHalf)
+        // console.log(bottomHalf)
+        let newPairings: TMatch[] = [];
         for (let i = 0; i < topHalf.length; i++) {
-          
           let newPairing = { player1: topHalf[i], player2: bottomHalf[i], result: "" };
+          await createMatch(newPairing, id);
           newPairings.push(newPairing);
 
           // console.log(newPairing)
         }
 
         if (bottomHalf.length > topHalf.length) {
-          setMatch({
-            player1:bottomHalf[bottomHalf.length - 1],
-            player2: {name:'bye', rating:"N/A", points:0, bye:true},
-            result:"",
-            
-          })
-         // let newPairing = { player1: bottomHalf[bottomHalf.length - 1], player2: { name: "bye", rating: "N/A" }, result: "" };
-          if(match) {
-            newPairings.push(match);
-          }
+          let newPairing = {
+            player1: bottomHalf[bottomHalf.length - 1],
+            player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: ""
+          };
+          await createMatch(newPairing, id);
+          newPairings.push(newPairing);
+        }
+        for (let i = 0; i < bye.length; i++) {
+          let newPairing = { player1: bye[i], player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: "" };
+          await createMatch(newPairing, id);
+          newPairings.push(newPairing);
         }
         setPairings(newPairings);
+        tournamentPlayers();
+
+        // pairings?.map((pairing, index) => {
+        //   await createMatch(pairing, id)
+        // }
+
+        // let newPairings: TMatch[] = [];
+        // for (let i = 0; i < topHalf.length; i++) {
+
+        //   let newPairing = { player1: topHalf[i], player2: bottomHalf[i], result: "" };
+        //   newPairings.push(newPairing);
+
+        //   // console.log(newPairing)
+        // }
+
+        // if (bottomHalf.length > topHalf.length) {
+        //   setMatch({
+        //     player1: bottomHalf[bottomHalf.length - 1],
+        //     player2: { name: 'bye', rating: "N/A", points: 0, bye: true },
+        //     result: "",
+
+        //   })
+        //   // let newPairing = { player1: bottomHalf[bottomHalf.length - 1], player2: { name: "bye", rating: "N/A" }, result: "" };
+        //   if (match) {
+        //     newPairings.push(match);
+        //   }
+        // }
+        // setPairings(newPairings);
       }
       else {
-        let newPairings:TMatch[] = [];
+        let newPairings: TMatch[] = [];
         if (players.length % 2 === 0) {
           for (let i = 0; i < players.length / 2; i++) {
             const newPairing = { player1: players[i], player2: players[players.length - 1 - i], result: "" };
@@ -273,20 +326,22 @@ const Rounds = () => {
             newPairings.push(newPairing);
           }
           setMatch({
-            player1:players[0],
-            player2: {name:'bye', rating:"N/A", points:0, bye:true},
-            result:""
+            player1: players[0],
+            player2: { name: 'bye', rating: "N/A", points: 0, bye: true },
+            result: ""
           })
           //const newPairing = { player1: players[0], player2: { name: "bye", rating: "N/A" }, result: "" };
-          if(match)
-          newPairings.push(match);
+          if (match)
+            newPairings.push(match);
         }
         setPairings(newPairings);
       }
     }
   }
 
-  const clearPairings = () => {
+  const clearPairings = async() => {
+    await deleteMatches(id);
+    tournamentPlayers();
     setPairings([]);
   }
 
@@ -297,13 +352,13 @@ const Rounds = () => {
         Round {data && data.index + 1}
         <br></br>
         <div style={{ fontSize: "4vh" }}>
-          <Button onClick={createPairings}>
+          <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
             Create Match Pairings
-          </Button>
+          </button>
           &nbsp;
-          <Button onClick={clearPairings}>
+          <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={clearPairings}>
             Delete All Match Pairings
-          </Button>
+          </button>
 
         </div>
       </Tournament>
@@ -329,7 +384,7 @@ const Rounds = () => {
                   <td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
-                    onChange={(e) => updatePairings(pairing, e.target.value)}
+                    onChange={(e) => updateResult(pairing, e.target.value)}
                   >
                     <option selected value="">Select Winner</option>
                     <option value="1">White Won</option>

@@ -1,14 +1,15 @@
 import { TMatch } from "../types/match";
 import { TRound } from "../types/round";
 
-const createMatch = async(round: TMatch)=> {
+const createMatch = async(match: TMatch, id: string)=> {
     return new Promise(async (resolve, reject) => {
         try {
           await fetch(`${process.env.REACT_APP_API}/api/tournament/newMatch`, {
             method: "POST",
             credentials: "include",
             body: JSON.stringify({
-              round: round,
+              match: match,
+              id: id,
             }),
             headers: {
               "Content-Type": "application/json",

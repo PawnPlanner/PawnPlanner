@@ -13,6 +13,7 @@ import {
     fetchTournamentByUser,
     byeRequest,
     removeBye,
+    fetchTournamentByRoundId,
 } from "../services/tournament"
 
 import {
@@ -24,6 +25,7 @@ import {
     addMatch,
     fetchRounds,
     fetchRoundById,
+    deleteMatches,
 } from "../services/round"
 
 import { error } from "console";
@@ -45,6 +47,17 @@ export const storeTournament = async (req: Request, res: Response) => {
 export const getTournamentById = async (req: Request, res: Response) => {
     try {
         const tournament = await fetchTournamentById(req.params.id);
+        res.status(201);
+        res.json({ tournament: tournament });
+    } catch (error) {
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+
+export const getTournamentByRoundId = async (req: Request, res: Response) => {
+    try {
+        const tournament = await fetchTournamentByRoundId(req.params.id);
         res.status(201);
         res.json({ tournament: tournament });
     } catch (error) {
@@ -141,8 +154,20 @@ export const storeRound = async (req: Request, res: Response) => {
 export const storeMatch = async (req: Request, res: Response) => {
     try {
         const match = await createMatch(req.body.match);
-        await saveMatch(match);
+        await addMatch(match, req.body.id);
 
+        res.status(201);
+        res.json({ msg: "success" })
+    } catch (error) {
+        console.error(error);
+        res.status(500);
+        res.json({ error: error });
+    }
+}
+
+export const deleteAllMatches = async (req: Request, res: Response) => {
+    try {
+        await deleteMatches(req.body.id);
         res.status(201);
         res.json({ msg: "success" })
     } catch (error) {

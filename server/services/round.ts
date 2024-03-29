@@ -19,16 +19,16 @@ import { assert } from "console";
 export const createRound = async (
     newRound: TRound,
     ID: string,
-) : Promise<mongoose.Document<unknown, any, IRound>> => {
+): Promise<mongoose.Document<unknown, any, IRound>> => {
     const round = new Round({
-        
+
         number: newRound.number,
     })
-   let tourn = await Tournament.findOne({_id: ID}, "roundsArray");
+    let tourn = await Tournament.findOne({ _id: ID }, "roundsArray");
     let rounds = tourn.roundsArray;
     rounds.push(round._id.toString());
-    await Tournament.findByIdAndUpdate(ID,{roundsArray: rounds});
-  
+    await Tournament.findByIdAndUpdate(ID, { roundsArray: rounds });
+
     return round;
 };
 
@@ -36,9 +36,9 @@ export const saveRound = async (
     round: mongoose.Document<unknown, any, IRound>
 ) => {
     try {
-      const savedRound = await round.save();
-      
-      return savedRound;
+        const savedRound = await round.save();
+
+        return savedRound;
     } catch (error) {
         throw error;
     }
@@ -46,20 +46,39 @@ export const saveRound = async (
 
 export const createMatch = async (
     newMatch: TMatch
-) : Promise<mongoose.Document<unknown, any, IMatch>> => {
+): Promise<mongoose.Document<unknown, any, IMatch>> => {
     const match = new Match({
-      player1: newMatch.player1,
-      player2: newMatch.player2,
+        player1: newMatch.player1,
+        player2: newMatch.player2,
+        result: ""
     })
     return match;
 };
 
+export const addMatch = async (
+    match: mongoose.Document<unknown, any, IMatch>, id: string) => {
+    try {
+        await Round.findOneAndUpdate({ _id: id }, { $addToSet: { matches: match } });
+    } catch (error) {
+        throw error
+    }
+}
+
+export const deleteMatches = async (
+    id: string) => {
+    try {
+        await Round.findOneAndUpdate({ _id: id }, { $set: { matches: [] } });
+    } catch (error) {
+        throw error
+    }
+}
+
 export const saveMatch = async (
-    match:  mongoose.Document<unknown, any, IMatch>
+    match: mongoose.Document<unknown, any, IMatch>
 ) => {
     try {
-      const savedMatch = await match.save();
-      return savedMatch;
+        const savedMatch = await match.save();
+        return savedMatch;
     } catch (error) {
         throw error;
     }
@@ -68,20 +87,13 @@ export const saveMatch = async (
 export const updateResult = async (
     match: TMatch
 ) => {
-    try{
+    try {
         await Match.findOneAndUpdate(match, {
             result: match.result,
         });
     } catch (error) {
         throw error;
     }
-}
-
-export const addMatch = async (
-    match:  mongoose.Document<unknown, any, IMatch>,
-    round:  mongoose.Document<unknown, any, IRound>,
-) => {
-    await Round.findOneAndUpdate({round}, {$push: {matches: match}});
 }
 
 export const fetchRounds = async (
@@ -98,9 +110,9 @@ export const fetchRounds = async (
 
 export const fetchRoundById = async (id: string) => {
     try {
-      const round = await Round.findOne({ _id: id });
-      return round;
+        const round = await Round.findOne({ _id: id });
+        return round;
     } catch (error) {
-      throw error;
+        throw error;
     }
-  }
+}
