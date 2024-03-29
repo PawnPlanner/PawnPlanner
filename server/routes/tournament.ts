@@ -18,7 +18,8 @@ import {
     getRounds,
     getRoundById,
     updateMatch,
-    getRoundNumber
+    getRoundNumber,
+    addPoints,
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -36,6 +37,7 @@ router.post("/api/tournament/newRound", storeRound);
 router.post("/api/tournament/newMatch", storeMatch);
 router.post("/api/tournament/deleteMatches", deleteAllMatches);
 router.post("/api/tournament/updateMatchResult", updateMatch);
+router.post("/api/tournament/addPoints", addPoints);
 
 router.get("/api/tournament/:id", getTournamentById);
 router.get("/api/tournament/round/:id", getTournamentByRoundId);

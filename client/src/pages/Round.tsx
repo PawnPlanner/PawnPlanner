@@ -15,6 +15,7 @@ import { TRound } from "../types/round";
 import updateMatch from "../services/update-match";
 import { set } from "mongoose";
 import editTournament from "../services/edit-tournament";
+import addPoints from "../services/add-points";
 
 const Container = styled.div`
   display: flex;
@@ -244,13 +245,30 @@ const Rounds = () => {
       setPairings(newPairings);
       // console.log(pairings);
       await updateMatch(pairing, matchResult, id);
-      tournamentPlayers();
+
+      await fetchRoundById(id).then((round) => {
+        setRound(round);
+        // console.log(round)
+      })
+      if (matchResult === "1" || matchResult === "1F") {
+        addPoints(pairing.player1, 1, id);
+      } else if (matchResult === "0.5") {
+        addPoints(pairing.player1, 0.5, id);
+        addPoints(pairing.player2, 0.5, id);
+      } else if (matchResult === "0") {
+        addPoints(pairing.player2, 1, id);
+      }
     }
   }
 
-  if (!tournament) {
-    return <div>fetching tournament</div>
-  }
+  // const submitResults = () => {
+  //   round?.matches?.map((match) => {
+  //     console.log(match.player1)
+
+  //   })
+
+  // }
+
 
   // const createMatches = async (pairing: TMatch) => {
   //   await createMatch(pairing, id);
