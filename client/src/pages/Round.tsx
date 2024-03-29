@@ -12,6 +12,7 @@ import fetchTournamentByRoundId from "../services/fetch-tournament-by-round-id";
 import deletePlayer from "../services/delete-player";
 import deleteMatches from "../services/delete-matches";
 import { TRound } from "../types/round";
+import updateMatch from "../services/update-match";
 
 const Container = styled.div`
   display: flex;
@@ -203,7 +204,7 @@ const Rounds = () => {
       await fetchRoundById(id).then((round) => {
         setRound(round);
       })
-      console.log(tournament)
+      // console.log(tournament)
     }
   }
   useEffect(() => {
@@ -230,14 +231,16 @@ const Rounds = () => {
 
   }
 
-  const updateResult = (pairing: TMatch, matchResult: string) => {
+  const updateResult = async (pairing: TMatch, matchResult: string) => {
     if (pairings) {
       const index = pairings.findIndex((p) => p.player1 === pairing.player1);
       const updatedPairings = { ...pairings[index], result: matchResult };
       const newPairings = [...pairings];
       newPairings[index] = updatedPairings;
       setPairings(newPairings);
-      console.log(pairings);
+      // console.log(pairings);
+
+      await updateMatch(pairing, matchResult, id);
     }
   }
 
@@ -339,7 +342,7 @@ const Rounds = () => {
     }
   }
 
-  const clearPairings = async() => {
+  const clearPairings = async () => {
     await deleteMatches(id);
     tournamentPlayers();
     setPairings([]);
@@ -386,7 +389,7 @@ const Rounds = () => {
                     value={pairing.result}
                     onChange={(e) => updateResult(pairing, e.target.value)}
                   >
-                    <option selected value="">Select Winner</option>
+                    <option disabled selected value="">Select Winner</option>
                     <option value="1">White Won</option>
                     <option value="0.5">Draw</option>
                     <option value="0">Black Won</option>

@@ -116,3 +116,17 @@ export const fetchRoundById = async (id: string) => {
         throw error;
     }
 }
+
+export const updateMatchResult = async (
+    match: TMatch, result: string, id: string) => {
+    try {
+        console.log(id)
+        await Round.findOneAndUpdate(
+            {
+                _id: id, "matches.player1": match.player1
+            },
+            { $set: { "matches.$.result": result } })
+    } catch (error) {
+        throw error
+    }
+}
