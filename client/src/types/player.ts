@@ -6,6 +6,7 @@ export type TPlayer = {
     points: number,
     bye: boolean,
     matches?: [TMatch]; 
+    _id?: string;
   };
   
   export type TPlayerWrapper = {
