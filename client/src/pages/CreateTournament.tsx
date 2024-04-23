@@ -118,7 +118,24 @@ const CreateTournament = () => {
           </select>
           <br></br>
           <br></br>
-
+            <label>
+              Privacy
+            </label>
+            <select
+             className="px-5 py-1 mt-2 rounded-full"
+            
+            onChange={(e) => {
+              if(e.target.value == "true") {
+                setIsPrivate(true);
+              }
+              else {
+                setIsPrivate(false);
+              }
+             
+            }}>
+            <option className="radio" value="true">Private</option>
+            <option value="false">Public</option>
+          </select>
           {name !== "" && location !== "" && rounds !== '0' && <Link
             to="/TournamentInfo:id"
             
