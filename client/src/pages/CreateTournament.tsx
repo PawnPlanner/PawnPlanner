@@ -23,6 +23,7 @@ const CreateTournament = () => {
   const [pairingSystem, setPairingSystem] = useState('Swiss');
   const [tournament, setTournament] = useState<TTournament>();
   const [user, setUser] = useState<TUser | null>(null);
+  const [isPrivate, setIsPrivate] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     setUser(Session.getUser());
@@ -117,6 +118,7 @@ const CreateTournament = () => {
           </select>
           <br></br>
           <br></br>
+
           {name !== "" && location !== "" && rounds !== '0' && <Link
             to="/TournamentInfo:id"
             
@@ -131,6 +133,7 @@ const CreateTournament = () => {
                 rounds: rounds,
                 owner: user.username,
                 currentRound: 1,
+                isPrivate: isPrivate,
               }).then(async () => {
                 await fetchTournamentByName(name).then(async (tourn) => {
                   if(tourn._id){

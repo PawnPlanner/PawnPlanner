@@ -19,6 +19,7 @@ const EditPage = () => {
     const [rounds, setRounds] = useState<string>("");
     const [pairingSystem, setPairingSystem] = useState("");
     const [date, setDate] = useState<Date | null>(null);
+    const [isPrivate, setIsPrivate] = useState(false);
     useEffect(() => {
         setUser(Session.getUser());
       }, [user]);
@@ -39,6 +40,7 @@ const EditPage = () => {
             setPairingSystem(tourn.pairingSystem);
             setDate(tourn.date);
             setRounds(tourn.rounds);
+            setIsPrivate(tourn.isPrivate);
         };
     
    }
@@ -153,6 +155,7 @@ const EditPage = () => {
                 players: tournament.players,
                 owner: tournament.owner,
                 currentRound: tournament.currentRound,
+                isPrivate: isPrivate,
               })
               .then (async(res) => {
                 setTimeout(() => {
@@ -179,6 +182,7 @@ const EditPage = () => {
                     players: tournament.players,
                     owner: user.username,
                     currentRound: tournament.currentRound,
+                    isPrivate: tournament.isPrivate,
                 })
                 .then( async() => {
                     navigate('/');

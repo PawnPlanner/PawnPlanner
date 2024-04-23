@@ -21,10 +21,28 @@ const Navbar = () => {
     <nav className="h-24 bg-navy">
         <div className="w-screen mx-auto">
             <div className="flex justify-between">
-                <div className="flex space-x-7">
+                <div className="flex justify-between space-x-48">
                     <div>
-                        <a href="/" className="flex items-center px-6 py-4">
-                            <img className="w-2/5" src="/img/pawnlogo.png" />
+                        <a href="#" className="flex items-center w-full px-6 py-4">
+                            <a href="/">
+                            <img className="w-72" src="/img/pawnlogo.png" />
+                            </a>
+                        </a>
+                    </div>
+                    
+                    <div className="items-center hidden space-x-1 lg:flex">
+                        <a href="/search" className="text-2xl text-lgrey hover:text-grey">
+                            Search
+                        </a>
+                    </div>
+                    <div className="items-center hidden space-x-1 lg:flex">
+                        <a href="/myTournaments" className="text-2xl text-lgrey hover:text-grey">
+                            My Tournaments
+                        </a>
+                    </div> 
+                    <div className="items-center hidden space-x-1 lg:flex">
+                        <a href="/createTournament" className="text-2xl text-lgrey hover:text-grey">
+                            Create Tournament
                         </a>
                     </div>
                     <div className="">

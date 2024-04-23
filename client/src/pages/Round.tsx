@@ -429,6 +429,7 @@ Back
                players: tournament.players,
                owner: tournament.owner,
                currentRound: tournament.currentRound + 1,
+               isPrivate: tournament.isPrivate,
              }).then(() => {
               iscurrentRound();
              })

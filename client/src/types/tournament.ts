@@ -12,5 +12,6 @@ export type TTournament = {
     owner:string;
     roundsArray?: [TRound];
     currentRound: number;
+    isPrivate: boolean;
 };
   

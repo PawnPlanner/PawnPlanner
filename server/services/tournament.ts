@@ -19,6 +19,7 @@ export const createtournament = async (
     date: newTournament.date,
     owner: newTournament.owner,
     currentRound: newTournament.currentRound,
+    isPrivate: newTournament.isPrivate,
   });
 
   return tournament;
@@ -115,6 +116,7 @@ export const updateTournament = async (
       players: tournament.players,
       owner: tournament.owner,
       currentRound: tournament.currentRound,
+      isPrivate: tournament.isPrivate,
     });
 
   } catch (error) {

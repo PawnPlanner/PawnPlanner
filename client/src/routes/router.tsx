@@ -11,6 +11,7 @@ import Round from "../pages/Round";
 import EditPage from "../pages/edit-tournament-page";
 import MyTournamentPage from "../pages/my-tournaments-page";
 import MatchHistoryPage from "../pages/match-history-page";
+import SearchPage from "../pages/search-page";
 
 const Router = () => {
     let element = useRoutes([
@@ -55,7 +56,11 @@ const Router = () => {
         {
             path:"/matchHistory/:name",
             element: <MatchHistoryPage />
-        }
+        },
+        {
+            path:"/search",
+            element: <SearchPage />
+        },
     ]);
     return element;
 };
