@@ -16,6 +16,7 @@ import updateMatch from "../services/update-match";
 import { set } from "mongoose";
 import editTournament from "../services/edit-tournament";
 import addPoints from "../services/add-points";
+import Session from "../session";
 
 const Container = styled.div`
   display: flex;
@@ -186,6 +187,7 @@ const Rounds = () => {
   const [round, setRound] = useState<TRound>();
   const [bye, setBye] = useState<TPlayer[] | []>([]);
   const [noBye, setNoBye] = useState<TPlayer[] | []>([]);
+  const currentUser = Session.getUser();
  
   let navigate = useNavigate();
   // console.log(data);
@@ -216,7 +218,7 @@ const Rounds = () => {
     tournamentPlayers();
   }, [])
 
-  if (!tournament) {
+  if (!tournament || !currentUser) {
     return <div>fetching tournament</div>
   }
   if (!id) {
@@ -410,7 +412,7 @@ Back
         <br></br>
         
         <div style={{ fontSize: "4vh" }}>
-          <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
+        {currentUser.username == tournament.owner  ? (<div><button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
             Create Match Pairings
           </button>
           &nbsp;
@@ -438,7 +440,8 @@ Back
            }}
           >
                 finish round
-              </button>
+              </button></div>) : (<div></div>)}
+          
         </div>
       
       </Tournament>
@@ -461,7 +464,7 @@ Back
                   {pairing.player1 && <td>{pairing.player1.rating}</td>}
                   {pairing.player2 && <td>{pairing.player2.name}</td>}
                   {pairing.player2 && <td>{pairing.player2.rating}</td>}
-                  <td><select
+                  {currentUser.username == tournament.owner  ? (<td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
                     onChange={(e) => updateResult(pairing, e.target.value)}
@@ -471,7 +474,8 @@ Back
                     <option value="0.5">Draw</option>
                     <option value="0">Black Won</option>
                     <option value="1F">Bye</option>
-                  </select></td>
+                  </select></td>) : (<td>In progress</td>)}
+                  
                 </TableRow>
               ))}
             

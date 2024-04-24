@@ -17,6 +17,7 @@ import PlayerL from "../components/player";
 
 import byeSignup from "../services/bye-signup";
 import byeRemoval from "../services/bye-removal";
+import Session from "../session";
 
 const Container = styled.div`
   display: flex;
@@ -186,6 +187,7 @@ const TournamentInfo = () => {
     let navigate = useNavigate();
     const [byes, setByes] = useState("");
     const [isPrivate, setIsPrivate] = useState("");
+    let currentUser = Session.getUser();
 
     const tournamentPlayers = async () => {
         if (id) {
@@ -215,7 +217,7 @@ const TournamentInfo = () => {
         tournamentPlayers();
     }, [])
 
-    if (!tournament || !rounds ) {
+    if (!tournament || !rounds || !currentUser) {
         return <div>fetching tournament</div>
     }
     if (!id) {
@@ -235,10 +237,11 @@ const TournamentInfo = () => {
                     <br></br>
                     Rounds: {tournament.rounds} | Pairing System: {tournament.pairingSystem} | {isPrivate}
                     <br />
-                    <button className="w-12 text-base rounded-full font-large bg-navy text-lgrey"
+                    {currentUser.username == tournament.owner  ? (<button className="w-12 text-base rounded-full font-large bg-navy text-lgrey"
                         onClick={() => navigate(`/edit/${id}`)}>
                         edit
-                    </button>
+                    </button>) : (<div></div>)}
+                    
                 </Info>
 
             </Tournament>
@@ -279,7 +282,7 @@ const TournamentInfo = () => {
                                 }, id)
                                 tournamentPlayers();
                             }}>
-                            Add player
+                            {currentUser.username == tournament.owner  ? (<div>Add Player</div>) : (<div>Sign Up</div>)}
                         </button>
 
                     </form>
