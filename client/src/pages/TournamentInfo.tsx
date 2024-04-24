@@ -185,6 +185,7 @@ const TournamentInfo = () => {
     const { id } = useParams();
     let navigate = useNavigate();
     const [byes, setByes] = useState("");
+    const [isPrivate, setIsPrivate] = useState("");
 
     const tournamentPlayers = async () => {
         if (id) {
@@ -195,6 +196,11 @@ const TournamentInfo = () => {
                     fetchRounds(id).then((rounds) => {
                         setRounds(rounds);
                     })
+                    if(tournament.isPrivate) {
+                        setIsPrivate("Private");
+                    } else {
+                        setIsPrivate("Public");
+                    }
                    
                 }
             }).then(() => {
@@ -227,7 +233,7 @@ const TournamentInfo = () => {
                 <Info>
                     Location: {tournament.location} | Date: {tournament.date ? new Date(tournament.date).toLocaleDateString() : ""}
                     <br></br>
-                    Rounds: {tournament.rounds} | Pairing System: {tournament.pairingSystem}
+                    Rounds: {tournament.rounds} | Pairing System: {tournament.pairingSystem} | {isPrivate}
                     <br />
                     <button className="w-12 text-base rounded-full font-large bg-navy text-lgrey"
                         onClick={() => navigate(`/edit/${id}`)}>

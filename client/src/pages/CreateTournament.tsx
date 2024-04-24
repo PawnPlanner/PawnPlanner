@@ -118,11 +118,12 @@ const CreateTournament = () => {
           </select>
           <br></br>
           <br></br>
-            <label>
+          <label>
               Privacy
             </label>
+            <br></br>
             <select
-             className="px-5 py-1 mt-2 rounded-full"
+             className="px-5 mt-2 rounded-full"
             
             onChange={(e) => {
               if(e.target.value == "true") {
@@ -136,6 +137,8 @@ const CreateTournament = () => {
             <option className="radio" value="true">Private</option>
             <option value="false">Public</option>
           </select>
+          <br></br>
+          <br></br>
           {name !== "" && location !== "" && rounds !== '0' && <Link
             to="/TournamentInfo:id"
             

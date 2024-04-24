@@ -142,7 +142,27 @@ const EditPage = () => {
           </select>
           <br></br>
           <br></br>
-         
+          <label>
+              Privacy
+            </label>
+            <br></br>
+            <select
+             className="px-5 mt-2 rounded-full"
+            defaultValue={tournament.isPrivate.toString()}
+            onChange={(e) => {
+              if(e.target.value == "true") {
+                setIsPrivate(true);
+              }
+              else {
+                setIsPrivate(false);
+              }
+             
+            }}>
+            <option className="radio" value="true">Private</option>
+            <option value="false">Public</option>
+          </select>
+          <br></br>
+          <br></br> 
             <button className="px-4 py-3 m-10 rounded-full bg-navy text-lgrey hover:text-grey"
             onClick={ async () => {
              await editTournament({
