@@ -381,15 +381,15 @@ if(!round) {
   const iscurrentRound = () => {
     if(round.number == tournament.currentRound) {
       return(
-        <div className="text-xl">Curent Round</div>
+        <div className="text-xl text-navy">Curent Round</div>
       )
     } else if (round.number < tournament.currentRound){
       return (
-        <div className="text-xl">This round is complete</div>
+        <div className="text-xl text-navy">This round is complete</div>
       ) 
     } else {
       return (
-        <div className="text-xl"> This round has not started</div>
+        <div className="text-xl text-navy"> This round has not started</div>
       )
     }
   }
@@ -409,17 +409,18 @@ Back
       <Tournament>
         Round {round?.number}
         <div>{iscurrentRound()}</div>
-        <br></br>
         
-        <div style={{ fontSize: "4vh" }}>
-        {currentUser.username == tournament.owner  ? (<div><button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={createPairings}>
+        
+        <div className="" style={{}}>
+        {currentUser.username == tournament.owner  ? (<div><button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={createPairings}>
             Create Match Pairings
           </button>
-          &nbsp;
-          <button className="px-1 mx-1 rounded-md text-[#edf2f4] bg-red" onClick={clearPairings}>
-            Delete All Match Pairings
+        
+          <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={clearPairings}>
+            Delete Match Pairings
           </button>
-          <button className="text-xl text-grey round-full bg-navy"
+          
+          <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2"
           onClick={ async () => {
             await editTournament({
                _id: tournament._id,
@@ -439,7 +440,7 @@ Back
              
            }}
           >
-                finish round
+                Finish Round
               </button></div>) : (<div></div>)}
           
         </div>
