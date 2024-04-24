@@ -183,3 +183,14 @@ export const additionalPoints = async (
     throw error
   }
 }
+
+export const fetchTournnamentsbyName = async (name: string) =>  {
+  var regexp = new RegExp("^" + name);
+  try {
+    const tournaments = await Tournament.find({name: regexp});
+    return tournaments;
+  } catch(error) {
+    console.error(error);
+    throw error;
+  }
+};

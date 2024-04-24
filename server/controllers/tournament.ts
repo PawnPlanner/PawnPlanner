@@ -15,6 +15,7 @@ import {
     removeBye,
     fetchTournamentByRoundId,
     additionalPoints,
+    fetchTournnamentsbyName,
 } from "../services/tournament"
 
 import {
@@ -271,5 +272,19 @@ export const addPoints = async (req: Request, res: Response) => {
     } catch {
         res.status(500);
         res.json({ error: error });
+    }
+}
+
+export const getTournamentsByName = async(
+    req: Request, 
+    res:Response,
+    next: NextFunction) => {
+    try{
+        const tournaments = await fetchTournnamentsbyName(req.body.tournament);
+        res.status(200);
+        res.json({tournaments: tournaments});
+    } catch(error) {
+        res.json(404);
+        res.json({msg: "cannot find tounrmanet"})
     }
 }

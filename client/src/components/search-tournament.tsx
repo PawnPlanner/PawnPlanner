@@ -2,10 +2,12 @@ import { useState } from "react";
 import { TUser } from "../types/user";
 import { useNavigate } from "react-router-dom";
 import Session from "../session";
+import { TTournament } from "../types/tournament";
+import fetchTournaments from "../services/fetch-tournaments";
 
 const SearchTournament = () => {
   let currentUser = Session.getUser();
-  let [users, setUsers] = useState<TUser[]>([]);
+  let [tournaments, setTournaments] = useState<TTournament[]>([]);
   const navigate = useNavigate();
 
   if (!currentUser) {
@@ -23,7 +25,19 @@ const SearchTournament = () => {
                 className="flex-1 block w-full px-3 py-2 focus:outline-none"
                 placeholder="Search for tournaments"
                 onChange={async (event) => {
-                  
+                  if((event.target.value as string) == "") {
+                    setTournaments([]);
+                  } else if ((event.target.value as string) !== "") {
+                    await fetchTournaments(event.target.value as string).then(
+                      (result) => {
+                        if(result) {
+                          setTournaments(result);
+                        } else {
+                          setTournaments([]);
+                        }
+                      }
+                    );
+                  }
                 }}
               />
               <span className="inline-flex items-center px-2 py-2 m-1 rounded-md cursor-pointer bg-navy">
@@ -42,23 +56,31 @@ const SearchTournament = () => {
             </div>
           </form>
 
-          {users.length > 0 ? (
-            users
+          {tournaments.length > 0 ? (
+            tournaments.filter(
+              (tournament) =>
+              !tournament!.isPrivate
+            )
               
-              .map((user) => {
+              .map((tournament) => {
                 return (
-                  <div key={user.email}>
+                  <div key={tournament.name}>
                     <button
-                      key={user.username}
+                      key={tournament.location}
                       onClick={() => {
-                        navigate(`/user/${user.username}`);
+                        navigate(`/TournamentInfo/${tournament._id}`);
                       }}
                     >
-                      <div className="flex-1 block w-full px-3 py-2 mt-2 overflow-hidden bg-white rounded-md ">
-                        <div className="inline-flex items-center">
-                          <div className="text-sm">
+                      <div className="w-full py-2 mt-2 overflow-hidden rounded-md px-36 bg-lgrey text-navy">
+                        <div className="items-center ">
+                        <div className="text-lg">
                             <p className="pr-2 leading-none text-gray-900">
-                              {user.username}
+                              {tournament.name}
+                            </p>
+                          </div>
+                          <div className="text-lg">
+                            <p className="pr-2 leading-none text-gray-900">
+                              Location: {tournament.location}
                             </p>
                           </div>
                         </div>
