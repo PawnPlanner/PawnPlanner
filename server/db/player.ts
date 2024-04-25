@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import { IMatch } from "./match";
 
 export interface IPlayer {
   name: string;
@@ -6,7 +7,7 @@ export interface IPlayer {
   points: number;
   bye: boolean;
   id: string;
-  matches: Array<String>
+  matches: [IMatch]
 }
 
 const PlayerSchema = new Schema<IPlayer>(
@@ -32,7 +33,9 @@ const PlayerSchema = new Schema<IPlayer>(
       required: false,
     },
     matches: {
-      type: Array<String>(),
+      type:[{
+        
+      }],
       required: true,
   }
   },

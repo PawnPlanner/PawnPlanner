@@ -6,10 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import fetchMatches from "../services/fetch-matches";
 import { TMatch } from "../types/match";
 import Match from "../components/match";
+import fetchPlayerById from "../services/fetch-player";
+import { TPlayer } from "../types/player";
 
 const MatchHistoryPage = () => {
   const [user, setUser] = useState<TUser | null>(null);
   const [matches, setMatches] = useState<TMatch[]>()
+  const [player, setPlayer] = useState <TPlayer | null>();
   const {name} = useParams();
   useEffect(() => {
     setUser(Session.getUser());
@@ -17,11 +20,14 @@ const MatchHistoryPage = () => {
       fetchMatches(name).then((matches) => {
         setMatches(matches);
       })
+      fetchPlayerById(name).then((player) => {
+        setPlayer(player);
+      })
     }
   }, [user]);
   let navigate = useNavigate();
 
-  if (!user || ! name) {
+  if (!user || ! name || !player) {
     return <div>fetching user home</div>;
   }
   if(!matches) {
@@ -30,7 +36,7 @@ const MatchHistoryPage = () => {
       <Navbar />
       <div className="h-full bg-grey">
         <div className="flex justify-center pt-20">
-          <h1 className="text-5xl font-bold text-red">Match History for {name}</h1>
+          <h1 className="text-5xl font-bold text-red">Match History for {player.name}</h1>
         </div>
         <div className="flex justify-center mt-4 text-xl text-navy">
             No matches to display yet
@@ -47,7 +53,7 @@ const MatchHistoryPage = () => {
       <Navbar />
       <div className="h-full bg-grey">
         <div className="flex justify-center pt-20">
-          <h1 className="text-5xl font-bold text-red">Match History for {name}</h1>
+          <h1 className="text-5xl font-bold text-red">Match History for {player.name}</h1>
         </div>
         <div className="justify-center">
         <div className="grid w-full grid-cols-4 gap-5 p-5">
@@ -57,6 +63,7 @@ const MatchHistoryPage = () => {
                 return(
                     <Match
                     match={match}
+                    player={player}
                     />
                 )
             })}

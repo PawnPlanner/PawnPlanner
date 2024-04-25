@@ -32,7 +32,7 @@ import {
     deleteMatches,
     updateMatchResult,
     fetchRoundNumber,
-    
+    fetchMatchesByPlayer
 } from "../services/round"
 
 import { error } from "console";
@@ -314,7 +314,7 @@ export const getPlayerById = async(req: Request, res: Response) => {
     }
 }
 
-/*export const getMatchesByPlayer = async(req: Request, res: Response) => {
+export const getMatchesByPlayer = async(req: Request, res: Response) => {
     try {
         const matches = await fetchMatchesByPlayer(req.params.id);
         res.status(200);
@@ -324,4 +324,3 @@ export const getPlayerById = async(req: Request, res: Response) => {
         res.json({error: error});
     }
 }
-*/

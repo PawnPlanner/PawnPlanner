@@ -53,7 +53,8 @@ export const createMatch = async (
         player2: newMatch.player2,
         result: ""
     })
-   
+    await Player.findOneAndUpdate({_id:newMatch.player1._id},{$addToSet: {matches:match}} );
+    await Player.findOneAndUpdate({_id:newMatch.player2._id},{$addToSet: {matches:match}} );
     return match;
 };
 
@@ -61,6 +62,8 @@ export const addMatch = async (
     match: mongoose.Document<unknown, any, IMatch>, id: string) => {
     try {
         await Round.findOneAndUpdate({ _id: id }, { $addToSet: { matches: match } });
+       
+        
     } catch (error) {
         throw error
     }
@@ -146,5 +149,14 @@ export const fetchRoundNumber = async (
     }
     catch(error) {
      throw error
+    }
+}
+
+export const fetchMatchesByPlayer = async(id: string) => {
+    try {
+        const matches = await Player.findOne({_id: id});
+        return matches.matches;
+    } catch(error) {
+        throw error;
     }
 }

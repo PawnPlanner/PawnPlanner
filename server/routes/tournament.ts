@@ -23,6 +23,7 @@ import {
     getTournamentsByName,
     getPlayerById,
     addHalfPoint,
+    getMatchesByPlayer,
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -52,6 +53,7 @@ router.get("/api/rounds/:id", getRounds);
 router.get("/api/round/:id", getRoundById);
 router.get("/api/tournament/:id/:number", getRoundNumber);
 router.get("/api/player/:id", getPlayerById);
+router.get("/api/player/matches/:id", getMatchesByPlayer);
 
 
 

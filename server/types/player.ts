@@ -1,8 +1,10 @@
+import { TMatch } from "./match"
+
 export type TPlayer = {
     name: string,
     rating: number,
     points: number,
     bye: boolean,
-    matches: Array<string>,
+    matches?: [TMatch],
     _id?: string,
 }

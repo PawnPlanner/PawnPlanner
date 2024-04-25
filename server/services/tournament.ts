@@ -71,7 +71,6 @@ export const createPlayer = async (
     name: newPlayer.name,
     rating: newPlayer.rating,
     points: newPlayer.points,
-    matches: newPlayer.matches,
   });
 
   return player;

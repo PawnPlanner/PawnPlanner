@@ -11,27 +11,24 @@ import { match } from "assert";
 
 interface IMatchProps {
     match: TMatch;
+    player: TPlayer;
 }
 
 const Match = (props: IMatchProps) => {
-    let navigate = useNavigate();
-    const [player1, setPlayer1] = useState<TPlayer | null>(null);
-    /*useEffect(() => {
-        fetchPlayerById(props.match.player1._id).then((player1) => {
-            setPlayer1(player1);
-        })
-    })*/
-    if(!player1) {
-        return (
-            <div></div>
-        )
-    }
+    const [player1, setPlayer1] = useState(false);
+    useEffect(() => {
+        if(props.player.name == props.match.player1.name) {
+            setPlayer1(true);
+        }
+    })
 
     return (
-        <div className="w-full rounded-lg bg-navy drop-shadow-md">
+        <div className="w-full px-4 py-4 rounded-lg context-center bg-navy drop-shadow-md">
             
-                  
-                <span className="text- 2xl text-grey">{player1.name}</span>
+                  {player1 ? (<span className="text-3xl text-grey">Opponent: {props.match.player2.name}</span>)
+                  : <span className="text-3xl text-grey">Opponent: {props.match.player1.name}</span>}
+                  <br></br>
+                <span className="text-2xl text-lgrey">Result: {props.match.result}</span>
             
         </div>
     )
