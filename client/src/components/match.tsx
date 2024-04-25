@@ -16,11 +16,11 @@ interface IMatchProps {
 const Match = (props: IMatchProps) => {
     let navigate = useNavigate();
     const [player1, setPlayer1] = useState<TPlayer | null>(null);
-    useEffect(() => {
-        fetchPlayerById(props.match.player1).then((player1) => {
+    /*useEffect(() => {
+        fetchPlayerById(props.match.player1._id).then((player1) => {
             setPlayer1(player1);
         })
-    })
+    })*/
     if(!player1) {
         return (
             <div></div>
