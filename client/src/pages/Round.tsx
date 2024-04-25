@@ -385,7 +385,7 @@ const Rounds = () => {
   const iscurrentRound = () => {
     if (round.number == tournament.currentRound) {
       return (
-        <div className="text-xl text-navy">Curent Round</div>
+        <div className="text-xl text-navy">Current Round</div>
       )
     } else if (round.number < tournament.currentRound) {
       return (
@@ -428,7 +428,7 @@ const Rounds = () => {
               onClick={async () => {
                 await editTournament({
                   _id: tournament._id,
-                  name: name,
+                  name: tournament.name,
                   location: tournament.location,
                   date: tournament.date,
                   rounds: tournament.rounds,
