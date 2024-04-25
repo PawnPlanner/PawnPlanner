@@ -187,6 +187,7 @@ const TournamentInfo = () => {
     let navigate = useNavigate();
     const [byes, setByes] = useState("");
     const [isPrivate, setIsPrivate] = useState("");
+    const [winner, setWinner] = useState("");
     let currentUser = Session.getUser();
 
     const tournamentPlayers = async () => {
@@ -198,19 +199,19 @@ const TournamentInfo = () => {
                     fetchRounds(id).then((rounds) => {
                         setRounds(rounds);
                     })
-                    if(tournament.isPrivate) {
+                    if (tournament.isPrivate) {
                         setIsPrivate("Private");
                     } else {
                         setIsPrivate("Public");
                     }
-                   
+
                 }
             }).then(() => {
-                if(tournament) {
-                   
+                if (tournament) {
+
                 }
             })
-           
+
         }
     }
     useEffect(() => {
@@ -224,24 +225,40 @@ const TournamentInfo = () => {
         return <div>fetching tournament</div>
     }
 
+    const determineWinner = () => {
+        players.sort((a, b) => {
+            if (a.points == b.points) {
+                return parseInt(b.rating) - parseInt(a.rating);
+            }
+            return b.points - a.points;
+        })
+        if (players) {
+            setWinner(players[0].name);
+        }
+    }
+
     return (
         <Container>
             <Navbar />
             <Tournament>
 
                 {tournament.name}
-                <br></br>
 
                 <Info>
                     Location: {tournament.location} | Date: {tournament.date ? new Date(tournament.date).toLocaleDateString() : ""}
                     <br></br>
                     Rounds: {tournament.rounds} | Pairing System: {tournament.pairingSystem} | {isPrivate}
                     <br />
-                    {currentUser.username == tournament.owner  ? (<button className="w-12 text-base rounded-full font-large bg-navy text-lgrey"
+                    {currentUser.username == tournament.owner ? (<button className="px-3 mx-3 rounded-md bg-navy text-lgrey"
                         onClick={() => navigate(`/edit/${id}`)}>
-                        edit
+                        Edit
                     </button>) : (<div></div>)}
-                    
+                    {currentUser.username == tournament.owner && tournament.currentRound > parseInt(tournament.rounds) ? (<button className="px-3 mx-3 rounded-md bg-navy text-lgrey"
+                        onClick={() => determineWinner()}>
+                        Complete Tournament
+                    </button>) : (<div></div>)}
+                    {winner != "" ? (<div>Winner: {winner}</div>) : (<div></div>)}
+
                 </Info>
 
             </Tournament>
@@ -253,7 +270,7 @@ const TournamentInfo = () => {
                         Player Registration
                     </Heading>
                     <form>
-                        <label>Name&nbsp;</label>
+                        <label>Name:&nbsp;</label>
                         <Input
                             type="text"
                             // placeholder="Name"
@@ -262,7 +279,7 @@ const TournamentInfo = () => {
                             onChange={(e) => setName(e.target.value)}>
                         </Input>
                         <br></br>
-                        <label>Rating</label>
+                        <label>Rating:&nbsp;</label>
                         <Input
                             type="number"
                             // placeholder="Rating"
@@ -270,8 +287,7 @@ const TournamentInfo = () => {
                             value={rating}
                             onChange={(e) => setRating(e.target.value)}>
                         </Input>
-                        &nbsp;
-                        <button className="px-5 py-0.5 mx-3 rounded-md bg-red"
+                        <button className="px-3 py-0.5 mx-3 rounded-md bg-red"
                             onClick={async (e) => {
                                 e.preventDefault();
                                 await addPlayer({
@@ -282,7 +298,7 @@ const TournamentInfo = () => {
                                 }, id)
                                 tournamentPlayers();
                             }}>
-                            {currentUser.username == tournament.owner  ? (<div>Add Player</div>) : (<div>Sign Up</div>)}
+                            {currentUser.username == tournament.owner ? (<div>Add Player</div>) : (<div>Sign Up</div>)}
                         </button>
 
                     </form>
@@ -343,9 +359,9 @@ const TournamentInfo = () => {
                     </Heading>
                     {rounds
                         .map((round, index) => {
-                            return(
+                            return (
                                 <RoundL
-                                    number = {index}
+                                    number={index}
                                     round={round}
                                     tournament={tournament}
                                 />
@@ -358,7 +374,7 @@ const TournamentInfo = () => {
                         Bye Queue
                     </Heading>
 
-                    <TableRow className = "mx-auto">
+                    <TableRow className="mx-auto">
                         <thead>
                             <th>Name</th>
                             <th>Options</th>
@@ -369,14 +385,14 @@ const TournamentInfo = () => {
                                     <TableRow key={index} >
                                         <td>{player.name}</td>
                                         <td> <button className="px-2 py-1 mx-1 text-sm rounded-md bg-red"
-                                                onClick={async (e) => {
-                                                    e.preventDefault()
-                                                    await byeRemoval(player, id)
-                                                    tournamentPlayers();
-                                                }}>
-                                                Remove
-                                            </button>
-                                            </td>
+                                            onClick={async (e) => {
+                                                e.preventDefault()
+                                                await byeRemoval(player, id)
+                                                tournamentPlayers();
+                                            }}>
+                                            Remove
+                                        </button>
+                                        </td>
                                     </TableRow>
                                 ))}
                         </tbody>
