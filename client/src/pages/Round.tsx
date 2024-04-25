@@ -381,7 +381,7 @@ const Rounds = () => {
     tournamentPlayers();
     setPairings([]);
   }
- const newResult = (result: string, match: TMatch) => {
+  const newResult = (result: string, match: TMatch) => {
     if(result == match.player1.name + 'won') {
       return '0'
     } else if (result == match.player2.name + 'won') {
@@ -394,6 +394,8 @@ const Rounds = () => {
       return "";
     }
  }
+
+ 
   const iscurrentRound = () => {
     if (round.number == tournament.currentRound) {
       return (
@@ -491,7 +493,7 @@ const Rounds = () => {
                     <option value="0.5">Draw</option>
                     <option value="0">Black Won</option>
                     <option value="1F">Bye</option>
-                  </select></td>) : (<td>In progress</td>)}
+                  </select></td>) : (<td>{pairing.result}</td>)}
 
                 </TableRow>
               ))}
