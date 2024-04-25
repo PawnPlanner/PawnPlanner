@@ -5,4 +5,5 @@ export type TMatch = {
     player1: TPlayer,
     player2: TPlayer,
     result?: string,
+    _id?: string,
 }

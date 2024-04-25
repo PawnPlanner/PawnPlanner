@@ -125,12 +125,24 @@ export const fetchRoundById = async (id: string) => {
 export const updateMatchResult = async (
     match: TMatch, result: string, id: string) => {
     try {
-        // console.log(id)
-        await Round.findOneAndUpdate(
-            {
-                _id: id, "matches.player1": match.player1
-            },
-            { $set: { "matches.$.result": result } })
+        let res;
+        if(result == '0') {
+            res = match.player2.name + ' won'
+            await Player.findOneAndUpdate({_id: match.player2}, {$inc:{points: 1} });
+        } else if (result == '0.5') {
+            res = 'Draw'
+            await Player.findOneAndUpdate({_id: match.player2}, {$inc:{points: 0.5} });
+            await Player.findOneAndUpdate({_id: match.player1}, {$inc:{points: 0.5} });
+        } else if(result == '1') {
+            res = match.player1.name + ' won'
+            await Player.findOneAndUpdate({_id: match.player1}, {$inc:{points: 1} });
+        } else {
+            res = 'Bye'
+        }
+        await Match.findOneAndUpdate({_id: match._id}, {result: res});
+        await Player.updateOne({_id: match.player1._id, "matches.player1": match.player1}, {$set:{"matches.$.result": res}});
+        await Player.updateOne({_id: match.player2._id, "matches.player1": match.player1}, {$set:{"matches.$.result": res}});
+        // update tournament players docs to match player docs
     } catch (error) {
         throw error
     }

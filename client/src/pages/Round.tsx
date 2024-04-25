@@ -381,7 +381,19 @@ const Rounds = () => {
     tournamentPlayers();
     setPairings([]);
   }
-
+ const newResult = (result: string, match: TMatch) => {
+    if(result == match.player1.name + 'won') {
+      return '0'
+    } else if (result == match.player2.name + 'won') {
+      return '1'
+    } else if(result == 'Bye') {
+      return'1F'
+    } else if(result == 'Draw') {
+      return '0.5'
+    } else {
+      return "";
+    }
+ }
   const iscurrentRound = () => {
     if (round.number == tournament.currentRound) {
       return (
@@ -472,7 +484,7 @@ const Rounds = () => {
                   {currentUser.username == tournament.owner ? (<td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
-                    onChange={(e) => updateResult(pairing, e.target.value)}
+                    onChange={(e) => updateResult(pairing, e.target.value).then(() => { newResult(e.target.value, pairing)})}
                   >
                     <option disabled selected value="">Select Winner</option>
                     <option value="1">White Won</option>

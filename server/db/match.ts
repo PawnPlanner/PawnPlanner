@@ -5,6 +5,7 @@ export interface IMatch {
     player1: IPlayer,
     player2: IPlayer,
     result: string,
+    id: string,
    
 }
 
@@ -22,6 +23,10 @@ const MatchSchema = new Schema<IMatch> (
             type: String,
             required: false,
         },
+        id: {
+            type: String,
+            required: false
+        }
        
     }
 );

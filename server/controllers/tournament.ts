@@ -87,8 +87,8 @@ export const getTournamentByName = async (req: Request, res: Response) => {
 
 export const additionalPlayer = async (req: Request, res: Response) => {
     try {
-        const player = await createPlayer(req.body.player);
-        await addPlayer(player, req.body.id);
+        const player = await createPlayer(req.body.player, req.body.id);
+        await addPlayer(player);
         res.status(201);
         res.json({ msg: "success" });
     } catch {

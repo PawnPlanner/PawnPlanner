@@ -65,22 +65,25 @@ export const fetchTournamentByName = async (name: string) => {
 }
 
 export const createPlayer = async (
-  newPlayer: TPlayer
+  newPlayer: TPlayer, id: string
 ): Promise<mongoose.Document<unknown, any, IPlayer>> => {
   const player = new Player({
     name: newPlayer.name,
     rating: newPlayer.rating,
     points: newPlayer.points,
   });
-
+  
+  let tourn = await Tournament.findOne({ _id: id  }, "players");
+  let players = tourn.players;
+  players.push(player);
+  await Tournament.findByIdAndUpdate(id, {players: players})
   return player;
 };
 
 export const addPlayer = async (
-  player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
+  player: mongoose.Document<unknown, any, IPlayer>) => {
   try {
     const savedPlayer =  await player.save();
-    await Tournament.findOneAndUpdate({ _id: id }, { $push: { players: player } })
     return savedPlayer;
   } catch (error) {
     throw error
@@ -218,4 +221,19 @@ export const fetchPlayerbyID = async (id: string) => {
   }
   
 
+}
+
+export const fetchPlayers = async (id: string) => {
+  try {
+    const players = await Tournament.findById({_id: id});
+    let i;
+    let ids = players.players;
+    let playArray: IPlayer[] = [];
+    for(i = 0; i < ids.length; i++) {
+      playArray[i] = await fetchPlayerbyID(ids[i].toString());
+    }
+    return playArray;
+  } catch(error) {
+    throw error;
+  }
 }
