@@ -17,6 +17,7 @@ import { set } from "mongoose";
 import editTournament from "../services/edit-tournament";
 import addPoints from "../services/add-points";
 import Session from "../session";
+import addHalfPoint from "../services/add-half-point";
 
 const Container = styled.div`
   display: flex;
@@ -188,7 +189,7 @@ const Rounds = () => {
   const [bye, setBye] = useState<TPlayer[] | []>([]);
   const [noBye, setNoBye] = useState<TPlayer[] | []>([]);
   const currentUser = Session.getUser();
- 
+
   let navigate = useNavigate();
   // console.log(data);
 
@@ -252,14 +253,17 @@ const Rounds = () => {
         setRound(round);
         // console.log(round)
       })
+      // console.log(pairing)
       if (matchResult === "1" || matchResult === "1F") {
-        addPoints(pairing.player1, 1, id);
+        addPoints(pairing.player1, 1, tournament._id ? tournament._id : id);
+        // console.log(tournament._id)
       } else if (matchResult === "0.5") {
-        addPoints(pairing.player1, 0.5, id);
-        addPoints(pairing.player2, 0.5, id);
-      } else if (matchResult === "0") {
-        addPoints(pairing.player2, 1, id);
-      }
+        addHalfPoint(pairing.player1, tournament._id ? tournament._id : id);
+        addHalfPoint(pairing.player2, tournament._id ? tournament._id : id);
+      } 
+      // else if (matchResult === "0") {
+      //   addPoints(pairing.player2, 1, id);
+      // }
     }
   }
 
@@ -302,7 +306,7 @@ const Rounds = () => {
             player1: bottomHalf[bottomHalf.length - 1],
             player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: ""
           };
-    
+
           await createMatch(newPairing, id);
           newPairings.push(newPairing);
         }
@@ -367,11 +371,11 @@ const Rounds = () => {
       }
     }
   }
-if(!round) {
-  return (
-    <div>fetching round</div>
-  )
-}
+  if (!round) {
+    return (
+      <div>fetching round</div>
+    )
+  }
   const clearPairings = async () => {
     await deleteMatches(id);
     tournamentPlayers();
@@ -379,72 +383,72 @@ if(!round) {
   }
 
   const iscurrentRound = () => {
-    if(round.number == tournament.currentRound) {
-      return(
+    if (round.number == tournament.currentRound) {
+      return (
         <div className="text-xl text-navy">Curent Round</div>
       )
-    } else if (round.number < tournament.currentRound){
+    } else if (round.number < tournament.currentRound) {
       return (
         <div className="text-xl text-navy">This round is complete</div>
-      ) 
+      )
     } else {
       return (
         <div className="text-xl text-navy"> This round has not started</div>
       )
     }
   }
-  
+
 
   return (
     <Container>
       <Navbar />
-      <div className="w-full pt-4 pl-4 bg-lgrey"> 
-      <button className="p-3 text-xl rounded-full bg-navy text-grey w-1/8" onClick={(async () => 
-               navigate(`/TournamentInfo/${tournament._id}`)
-              )}>
-Back 
-            </button>
+      <div className="w-full pt-4 pl-4 bg-lgrey">
+        <button className="p-3 text-xl rounded-full bg-navy text-grey w-1/8" onClick={(async () =>
+          navigate(`/TournamentInfo/${tournament._id}`)
+        )}>
+          Back
+        </button>
       </div>
 
       <Tournament>
         Round {round?.number}
         <div>{iscurrentRound()}</div>
-        
-        
+
+
         <div className="" style={{}}>
-        {currentUser.username == tournament.owner  ? (<div><button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={createPairings}>
+          {currentUser.username == tournament.owner ? (<div><button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={createPairings}>
             Create Match Pairings
           </button>
-        
-          <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={clearPairings}>
-            Delete Match Pairings
-          </button>
-          
-          <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2"
-          onClick={ async () => {
-            await editTournament({
-               _id: tournament._id,
-               name: name,
-               location: tournament.location,
-               date: tournament.date,
-               rounds: tournament.rounds,
-               pairingSystem: pairingSystem,
-               players: tournament.players,
-               owner: tournament.owner,
-               currentRound: tournament.currentRound + 1,
-               isPrivate: tournament.isPrivate,
-             }).then(() => {
-              iscurrentRound();
-             })
-             ;
-             
-           }}
-          >
-                Finish Round
-              </button></div>) : (<div></div>)}
-          
+
+            <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2" onClick={clearPairings}>
+              Delete Match Pairings
+            </button>
+
+            <button className="px-1 rounded-md text-[#edf2f4] bg-red hover:bg-navy text-4xl mx-2"
+              onClick={async () => {
+                await editTournament({
+                  _id: tournament._id,
+                  name: name,
+                  location: tournament.location,
+                  date: tournament.date,
+                  rounds: tournament.rounds,
+                  pairingSystem: pairingSystem,
+                  players: tournament.players,
+                  owner: tournament.owner,
+                  currentRound: tournament.currentRound + 1,
+                  isPrivate: tournament.isPrivate,
+                }).then(() => {
+                  iscurrentRound();
+                })
+                  ;
+
+              }}
+            >
+              Finish Round
+            </button></div>) : (<div></div>)}
+
         </div>
-      
+
       </Tournament>
       <InnerContainer>
         <MatchPairings>
@@ -465,7 +469,7 @@ Back
                   {pairing.player1 && <td>{pairing.player1.rating}</td>}
                   {pairing.player2 && <td>{pairing.player2.name}</td>}
                   {pairing.player2 && <td>{pairing.player2.rating}</td>}
-                  {currentUser.username == tournament.owner  ? (<td><select
+                  {currentUser.username == tournament.owner ? (<td><select
                     style={{ color: "black", borderRadius: "5px", height: "3vh", fontSize: "2vh" }}
                     value={pairing.result}
                     onChange={(e) => updateResult(pairing, e.target.value)}
@@ -476,16 +480,16 @@ Back
                     <option value="0">Black Won</option>
                     <option value="1F">Bye</option>
                   </select></td>) : (<td>In progress</td>)}
-                  
+
                 </TableRow>
               ))}
-            
+
             </tbody>
           </TableRow>
         </MatchPairings>
-   
+
       </InnerContainer >
-    
+
     </Container >
   )
 }

@@ -176,10 +176,24 @@ export const additionalPoints = async (
   try {
     await Tournament.findOneAndUpdate(
       {
-        roundsArray: id, "players.points": player.points,
+        _id: id, "players.points": player.points,
         "players.name": player.name, "players.rating": player.rating
       },
       { $inc: { "players.$.points": 1 } })
+  } catch (error) {
+    throw error
+  }
+}
+
+export const halfPoint = async (
+  player: TPlayer, id: string) => {
+  try {
+    await Tournament.findOneAndUpdate(
+      {
+        _id: id, "players.points": player.points,
+        "players.name": player.name, "players.rating": player.rating
+      },
+      { $inc: { "players.$.points": 0.5 } })
   } catch (error) {
     throw error
   }

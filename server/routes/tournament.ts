@@ -21,8 +21,12 @@ import {
     getRoundNumber,
     addPoints,
     getTournamentsByName,
+<<<<<<< HEAD
     getPlayerById,
     getMatchesByPlayer,
+=======
+    addHalfPoint,
+>>>>>>> 9de8ca99b1d99fad20ca0557ba760cbabe672826
 } from "../controllers/tournament"
 
 import auth from "../middlewares/auth";
@@ -41,6 +45,7 @@ router.post("/api/tournament/newMatch", storeMatch);
 router.post("/api/tournament/deleteMatches", deleteAllMatches);
 router.post("/api/tournament/updateMatchResult", updateMatch);
 router.post("/api/tournament/addPoints", addPoints);
+router.post("/api/tournament/addHalfPoint", addHalfPoint);
 router.post("/api/tournament/queryTournament", auth, getTournamentsByName);
 
 router.get("/api/tournament/:id", getTournamentById);
