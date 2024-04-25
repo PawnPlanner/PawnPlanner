@@ -71,6 +71,7 @@ export const createPlayer = async (
     name: newPlayer.name,
     rating: newPlayer.rating,
     points: newPlayer.points,
+    matches: newPlayer.matches,
   });
 
   return player;
@@ -194,3 +195,14 @@ export const fetchTournnamentsbyName = async (name: string) =>  {
     throw error;
   }
 };
+
+export const fetchPlayerbyID = async (id: string) => {
+  try{
+    const player = await Player.findById({_id: id});
+    return player;
+  } catch (error) {
+    throw(error);
+  }
+  
+
+}

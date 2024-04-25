@@ -16,6 +16,7 @@ import {
     fetchTournamentByRoundId,
     additionalPoints,
     fetchTournnamentsbyName,
+    fetchPlayerbyID,
 } from "../services/tournament"
 
 import {
@@ -29,7 +30,8 @@ import {
     fetchRoundById,
     deleteMatches,
     updateMatchResult,
-    fetchRoundNumber
+    fetchRoundNumber,
+    
 } from "../services/round"
 
 import { error } from "console";
@@ -159,7 +161,7 @@ export const storeMatch = async (req: Request, res: Response) => {
     try {
         const match = await createMatch(req.body.match);
         await addMatch(match, req.body.id);
-
+        await saveMatch(match);
         res.status(201);
         res.json({ msg: "success" })
     } catch (error) {
@@ -288,3 +290,26 @@ export const getTournamentsByName = async(
         res.json({msg: "cannot find tounrmanet"})
     }
 }
+
+export const getPlayerById = async(req: Request, res: Response) => {
+    try {
+        const player = await fetchPlayerbyID(req.params.id);
+        res.status(200);
+        res.json({player: player});
+    } catch (error) {
+        res.json(404);
+        res.json({error: error});
+    }
+}
+
+/*export const getMatchesByPlayer = async(req: Request, res: Response) => {
+    try {
+        const matches = await fetchMatchesByPlayer(req.params.id);
+        res.status(200);
+        res.json({matches: matches});
+    } catch (error) {
+        res.json(404);
+        res.json({error: error});
+    }
+}
+*/
