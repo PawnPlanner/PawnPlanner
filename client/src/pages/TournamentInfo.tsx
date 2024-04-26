@@ -342,6 +342,7 @@ const TournamentInfo = () => {
                             <th>Name</th>
                             <th>Rating</th>
                             <th>Points</th>
+                            <th>Estimated Rating</th>
                             <th>Options</th>
                         </thead>
                         <tbody className="w-full ">
@@ -359,6 +360,7 @@ const TournamentInfo = () => {
                                         }}>{player.name}</td>
                                         <td>{player.rating}</td>
                                         <td>{player.points}</td>
+                                        <td></td>
                                        
                                         
                                         { (currentUser?.username == player.name) || (currentUser?.username == tournament.owner)? ( 

@@ -86,10 +86,10 @@ export const createPlayer = async (
     _id: newPlayer._id,
   });
   
-  // let tourn = await Tournament.findOne({ _id: id  }, "players");
-  // let players = tourn.players;
-  // players.push(player);
-  // await Tournament.findByIdAndUpdate(id, {players: players})
+  let tourn = await Tournament.findOne({ _id: id  }, "players");
+  let players = tourn.players;
+  players.push(player);
+  await Tournament.findByIdAndUpdate(id, {players: players})
   return player;
 };
 
