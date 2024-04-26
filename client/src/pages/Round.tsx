@@ -347,27 +347,36 @@ const Rounds = () => {
         // setPairings(newPairings);
       }
       else {
+        const topHalf = noBye.slice(0, noBye.length / 2);
+        const bottomHalf = noBye.slice(noBye.length / 2);
+        // console.log(topHalf)
+        // console.log(bottomHalf)
         let newPairings: TMatch[] = [];
-        if (players.length % 2 === 0) {
-          for (let i = 0; i < players.length / 2; i++) {
-            const newPairing = { player1: players[i], player2: players[players.length - 1 - i], result: "" };
-            newPairings.push(newPairing);
-          }
-        } else {
-          for (let i = 1; i < players.length / 2; i++) {
-            const newPairing = { player1: players[i], player2: players[players.length - i], result: "" };
-            newPairings.push(newPairing);
-          }
-          setMatch({
-            player1: players[0],
-            player2: { name: 'bye', rating: "N/A", points: 0, bye: true },
-            result: ""
-          })
-          //const newPairing = { player1: players[0], player2: { name: "bye", rating: "N/A" }, result: "" };
-          if (match)
-            newPairings.push(match);
+        for (let i = 0; i < topHalf.length; i++) {
+          let newPairing = { player1: topHalf[i], player2: bottomHalf[i], result: "" };
+          await createMatch(newPairing, id);
+          newPairings.push(newPairing);
+
+          // console.log(newPairing)
+        }
+
+        if (bottomHalf.length > topHalf.length) {
+          let newPairing = {
+            player1: bottomHalf[bottomHalf.length - 1],
+            player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: ""
+          };
+
+          await createMatch(newPairing, id);
+          newPairings.push(newPairing);
+        }
+        for (let i = 0; i < bye.length; i++) {
+          let newPairing = { player1: bye[i], player2: { name: "bye", rating: "N/A", points: 0, bye: false }, result: "" };
+          await createMatch(newPairing, id);
+          newPairings.push(newPairing);
         }
         setPairings(newPairings);
+        // console.log(pairings)
+        tournamentPlayers();
       }
     }
   }
