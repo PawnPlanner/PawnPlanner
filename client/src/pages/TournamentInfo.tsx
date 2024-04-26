@@ -237,6 +237,34 @@ const TournamentInfo = () => {
         }
     }
 
+    const winExpectancy = (playerRating: number, opponentRating: number) => {
+        // let total = 0;
+        // players.map((player) => {
+        //     total += parseInt(player.rating);
+        // })
+        // return total;
+        let exponent = (playerRating - opponentRating) / 400;
+        // console.log(exponent);
+        return 1 / (Math.pow(10, -exponent) + 1);
+    }
+
+    const ratingEstimate = (player1: TPlayer) => {
+        if (tournament.currentRound == 1) {
+            return player1.rating;
+        }
+        let expectedWins = 0;
+        players.map((player) => {
+            if (player != player1) {
+                expectedWins += winExpectancy(parseInt(player1.rating), parseInt(player.rating))
+            }
+        })
+        let expectedWinrate = expectedWins / (players.length - 1);
+        let winrate = player1.points / (tournament.currentRound - 1);
+        // console.log(winrate)
+        // console.log(expectedWinrate)
+        return Math.round(parseInt(player1.rating) + 32 * (winrate - expectedWinrate));
+    }
+
     return (
         <Container>
             <Navbar />
@@ -360,34 +388,33 @@ const TournamentInfo = () => {
                                         }}>{player.name}</td>
                                         <td>{player.rating}</td>
                                         <td>{player.points}</td>
-                                        <td></td>
-                                       
-                                        
-                                        { (currentUser?.username == player.name) || (currentUser?.username == tournament.owner)? ( 
-                                        <td className="flex justify-between">
-                                        <button className="px-1 mx-1 text-sm rounded-md bg-red"
-                                                
-                                        onClick={async (e) => {
-                                                    e.preventDefault();
-                                                    await deletePlayer(player, id);
-                                                    tournamentPlayers();
-                                                }}>
-                                                Remove
-                                            </button>
-                                            <button className="px-1 mx-1 text-sm rounded-md bg-red"
-                                            onClick={async (e) => {
-                                                e.preventDefault()
-                                                console.log(players)
-                                                await byeSignup(player, id)
-                                                tournamentPlayers();
-                                            }}>
-                                            Bye Signup
-                                        </button>
-                                        </td>) :(<td className="flex justify-between">
-                                        
-                                        </td>)
+                                        <td>{ratingEstimate(player)}</td>
+
+                                        {(currentUser?.username == player.name) || (currentUser?.username == tournament.owner) ? (
+                                            <td className="flex justify-between">
+                                                <button className="px-1 mx-1 text-sm rounded-md bg-red"
+
+                                                    onClick={async (e) => {
+                                                        e.preventDefault();
+                                                        await deletePlayer(player, id);
+                                                        tournamentPlayers();
+                                                    }}>
+                                                    Remove
+                                                </button>
+                                                <button className="px-1 mx-1 text-sm rounded-md bg-red"
+                                                    onClick={async (e) => {
+                                                        e.preventDefault()
+                                                        console.log(players)
+                                                        await byeSignup(player, id)
+                                                        tournamentPlayers();
+                                                    }}>
+                                                    Bye Signup
+                                                </button>
+                                            </td>) : (<td className="flex justify-between">
+
+                                            </td>)
                                         }
-                                            
+
                                     </TableRow>
                                 ))}
                         </tbody>
