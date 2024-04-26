@@ -86,15 +86,15 @@ export const createPlayer = async (
     _id: newPlayer._id,
   });
   
-  let tourn = await Tournament.findOne({ _id: id  }, "players");
-  let players = tourn.players;
-  players.push(player);
-  await Tournament.findByIdAndUpdate(id, {players: players})
+  // let tourn = await Tournament.findOne({ _id: id  }, "players");
+  // let players = tourn.players;
+  // players.push(player);
+  // await Tournament.findByIdAndUpdate(id, {players: players})
   return player;
 };
 
 export const addPlayer = async (
-  player: mongoose.Document<unknown, any, IPlayer>) => {
+  player: mongoose.Document<unknown, any, IPlayer>, id: string) => {
   try {
     await Tournament.findOneAndUpdate({ _id: id }, { $push: { players: player } })
     return player;
