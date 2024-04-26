@@ -287,7 +287,7 @@ const TournamentInfo = () => {
                             value={rating}
                             onChange={(e) => setRating(e.target.value)}>
                         </Input>
-                        <button className="px-3 py-0.5 mx-3 rounded-md bg-red"
+                        {/* <button className="px-3 py-0.5 mx-3 rounded-md bg-red"
                             onClick={async (e) => {
                                 e.preventDefault();
                                 await addPlayer({
@@ -299,7 +299,41 @@ const TournamentInfo = () => {
                                 tournamentPlayers();
                             }}>
                             {currentUser.username == tournament.owner ? (<div>Add Player</div>) : (<div>Sign Up</div>)}
-                        </button>
+                        </button> */}
+
+                        {currentUser.username == tournament.owner ? (<button className="px-3 py-0.5 mx-3 rounded-md bg-red"
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                await addPlayer({
+                                    name: name,
+                                    rating: rating,
+                                    points: 0,
+                                    bye: false
+                                }, id)
+                                tournamentPlayers();
+                                setName("");
+                                setRating("");
+                            }}>
+                            Add Player
+                        </button>) : (<button className="px-3 py-0.5 mx-3 rounded-md bg-red"
+                            onClick={async (e) => {
+                                e.preventDefault();
+                                if (currentUser?._id) {
+                                    console.log(currentUser._id)
+                                    await addPlayer({
+                                        name: name,
+                                        rating: rating,
+                                        points: 0,
+                                        bye: false,
+                                        _id: currentUser._id
+                                    }, id)
+                                }
+                                tournamentPlayers();
+                                setName("");
+                                setRating("");
+                            }}>
+                            Sign Up
+                        </button>)}
 
                     </form>
                     <br></br>

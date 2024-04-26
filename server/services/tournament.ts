@@ -55,6 +55,18 @@ export const fetchTournamentByRoundId = async (id: string) => {
   }
 }
 
+export const fetchTournamentsByPlayerId = async (id: string) => {
+  try {
+    var ObjectId = require('mongodb').ObjectId;
+    var o_id = new ObjectId(id);
+    const tournament = await Tournament.find({ "players._id": o_id });
+    // console.log(tournament)
+    return tournament;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export const fetchTournamentByName = async (name: string) => {
   try {
     const tournament = await Tournament.findOne({ name: name });
@@ -71,6 +83,7 @@ export const createPlayer = async (
     name: newPlayer.name,
     rating: newPlayer.rating,
     points: newPlayer.points,
+    _id: newPlayer._id,
   });
   
   let tourn = await Tournament.findOne({ _id: id  }, "players");
@@ -83,8 +96,8 @@ export const createPlayer = async (
 export const addPlayer = async (
   player: mongoose.Document<unknown, any, IPlayer>) => {
   try {
-    const savedPlayer =  await player.save();
-    return savedPlayer;
+    await Tournament.findOneAndUpdate({ _id: id }, { $push: { players: player } })
+    return player;
   } catch (error) {
     throw error
   }
@@ -201,25 +214,25 @@ export const halfPoint = async (
   }
 }
 
-export const fetchTournnamentsbyName = async (name: string) =>  {
+export const fetchTournnamentsbyName = async (name: string) => {
   var regexp = new RegExp("^" + name);
   try {
-    const tournaments = await Tournament.find({name: regexp});
+    const tournaments = await Tournament.find({ name: regexp });
     return tournaments;
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     throw error;
   }
 };
 
 export const fetchPlayerbyID = async (id: string) => {
-  try{
-    const player = await Player.findById({_id: id});
+  try {
+    const player = await Player.findById({ _id: id });
     return player;
   } catch (error) {
-    throw(error);
+    throw (error);
   }
-  
+
 
 }
 

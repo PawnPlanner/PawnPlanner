@@ -18,6 +18,7 @@ import {
     fetchTournnamentsbyName,
     halfPoint,
     fetchPlayerbyID,
+    fetchTournamentsByPlayerId,
 } from "../services/tournament"
 
 import {
@@ -70,6 +71,18 @@ export const getTournamentByRoundId = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500);
         res.json({ error: error });
+    }
+}
+
+export const getTournamentsByPlayerId = async (req:Request, res: Response) => {
+    try {
+        const tournaments = await fetchTournamentsByPlayerId(req.params.id);
+        res.status(201);
+        res.json({tournaments: tournaments});
+    }
+    catch(error) {
+        res.status(500);
+        res.json({error: error});
     }
 }
 
@@ -139,7 +152,7 @@ export const getTournamentByUser = async (req:Request, res: Response) => {
         res.json({tournaments: tournaments});
     }
     catch(error) {
-        res.status(5005);
+        res.status(500);
         res.json({error: error});
     }
 }
@@ -262,7 +275,7 @@ export const getRoundNumber = async (req: Request, res:Response) => {
         res.status(201);
         res.json({round: round});
     } catch {
-        res.status(5005);
+        res.status(500);
         res.json({error: error});
     }
 }
